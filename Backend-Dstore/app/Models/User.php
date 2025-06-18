@@ -17,10 +17,13 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    const TYPE_ADMIN='admin';
+    const TYPE_MEMBER='member';
     protected $fillable = [
         'name',
         'email',
         'password',
+        'type'
     ];
 
     /**
