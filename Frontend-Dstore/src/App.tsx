@@ -1,19 +1,36 @@
-import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Home from '@/pages/Home'
-import Layout from '@/layouts/Layout'
-import DetailProduct from '@/pages/DetailProduct'
-import Cart from '@/pages/Cart'
+import React from "react";
+import {publicRoutes} from "@/constants/routesContant";
+import Layout from '@/layouts/Layout';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="detail" element={<DetailProduct />} />
-        <Route path="cart" element={<Cart />} />
-      </Route>
-    </Routes>
+      <BrowserRouter>
+          <div className="App">
+              <Routes>
+                  {publicRoutes.map((route, index) => {
+                      let DefaultLayout: React.ComponentType<any> = Layout
+                      if (route.layout) {
+                          DefaultLayout = route.layout as React.ComponentType<any>
+                      }
+                      const Page = route.element
+
+                      return (
+                          <Route
+                              key={index}
+                              path={route.path}
+                              element={
+                                  <DefaultLayout>
+                                      <Page />
+                                  </DefaultLayout>
+                              }
+                          />
+                      )
+                  })}
+              </Routes>
+          </div>
+      </BrowserRouter>
   )
 }
 
