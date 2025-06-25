@@ -176,7 +176,7 @@ const Home = () => {
 							</Typography>
 						</Box>
 						<Stack direction="row" spacing={1}>
-							{tabsHeadPhone.map((tab, index) => (
+							{tabsHeadPhone?.map((tab, index) => (
 								<Button
 									size="small"
 									sx={{
@@ -250,7 +250,7 @@ const Home = () => {
 							</Typography>
 						</Box>
 						<Stack direction="row" spacing={1}>
-							{tabsSpeaker.map((tab, index) => (
+							{tabsSpeaker?.map((tab, index) => (
 								<Button
 									size="small"
 									sx={{

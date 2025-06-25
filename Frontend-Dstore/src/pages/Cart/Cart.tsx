@@ -6,6 +6,7 @@ import { useMemo } from "react"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import routes from "@/routes/routes";
 const Cart = () => {
 
     const cart = useSelector((state: RootState) => state.cart)
@@ -30,24 +31,26 @@ const Cart = () => {
                 <Breadcrumbs
                     separator={<FaChevronRight fontSize="small" />}
                     aria-label="breadcrumb">
-                    <Link color="inherit" to="/">
+                    <Link color="inherit" to={routes.home}>
                         Trang chủ
                     </Link>
                     <Typography color="text.primary">Thông tin giỏ hàng</Typography>
                 </Breadcrumbs>
             </Stack>
             <div className=" max-w-screen-md mx-auto">
-                <div className="flex flex-col gap-5">
-                    <div className="flex ">
-                        <Link to={''} className="flex items-center gap-1 font-bold"><FaChevronLeft /> Trở về</Link>
-                        <h2 className="mx-auto font-bold">Giỏ hàng</h2>
+                {cart.products.length === 0 ? (
+                    <div className='flex flex-col gap-5 text-center my-32'>
+                        <p className='font-bold text-base '> Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
+
+                        <Link to={routes.home} className='text-red-500 font-medium'>Quay lại trang chủ</Link>
                     </div>
-                    <div className="shadow border p-3 rounded-xl">
-                        {cart.products.length === 0 ? (
-                            <div>
-                                Nothing in cart
-                            </div>
-                        ) : cart.products.map((i, index) => (
+                ) : cart.products.map((i, index) => (
+                    <div className="flex flex-col gap-5">
+                        <div className="flex ">
+                            <Link to={routes.detailProduct} className="flex items-center gap-1 font-bold"><FaChevronLeft /> Trở về</Link>
+                            <h2 className="mx-auto font-bold">Giỏ hàng</h2>
+                        </div>
+                        <div className="shadow border p-3 rounded-xl">
                             <div className="grid grid-cols-6 gap-4 ">
                                 {/* Cột ảnh và nút xóa */}
                                 <div className="col-span-2 flex flex-col items-center justify-between">
@@ -56,7 +59,8 @@ const Cart = () => {
                                         className="w-36"
                                         alt={i.name}
                                     />
-                                    <Button className="mt-6 text-red-600 hover:text-red-800" onClick={() => dispatch(removeFromCart(i))}>Xóa</Button>
+                                    <Button className="mt-6 text-red-600 hover:text-red-800"
+                                        onClick={() => dispatch(removeFromCart(i))}>Xóa</Button>
                                 </div>
 
                                 {/* Cột thông tin sản phẩm */}
@@ -70,9 +74,11 @@ const Cart = () => {
                                     <div className="flex items-center gap-4">
                                         <div className="flex items-center gap-5">
                                             <p className="text-lg font-semibold text-red-600">{priceFormat(i.price)}</p>
-                                            <del className="text-gray-500 text-sm font-medium">{priceFormat(i.priceOrigin)}</del>
+                                            <del
+                                                className="text-gray-500 text-sm font-medium">{priceFormat(i.priceOrigin)}</del>
                                         </div>
-                                        <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                                        <div
+                                            className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
                                             {percentFormat((i.priceOrigin - i.price) / i.priceOrigin)}
                                         </div>
                                     </div>
@@ -80,14 +86,16 @@ const Cart = () => {
                                     {/* Chọn số lượng */}
                                     <div className="flex items-center gap-3">
                                         <p>Chọn số lượng:</p>
-                                        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white w-fit">
+                                        <div
+                                            className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white w-fit">
                                             <button
                                                 onClick={() => descrea(i)}
                                                 className="w-7 h-5 flex items-center justify-center hover:bg-gray-100"
                                             >
                                                 −
                                             </button>
-                                            <div className="w-12 h-7 flex items-center justify-center border-x border-gray-300 font-medium">
+                                            <div
+                                                className="w-12 h-7 flex items-center justify-center border-x border-gray-300 font-medium">
                                                 {i.quantity}
                                             </div>
                                             <button
@@ -101,19 +109,25 @@ const Cart = () => {
                                 </div>
 
                             </div>
-                        ))}
-                    </div>
-                    <div className="flex flex-col gap-5 shadow rounded-xl p-3 border">
-                        <div className="flex justify-between font-bold">
-                            <p>Tổng tiền tạm tính:</p>
-                            <p>{priceFormat(totalAmount)}</p>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <button className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">Tiến hành đặt hàng</button>
-                            <button className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">Chọn thêm sản phẩm khác</button>
+                        <div className="flex flex-col gap-5 shadow rounded-xl p-3 border">
+                            <div className="flex justify-between font-bold">
+                                <p>Tổng tiền tạm tính:</p>
+                                <p>{priceFormat(totalAmount)}</p>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">Tiến
+                                    hành đặt hàng
+                                </button>
+                                <button
+                                    className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">Chọn
+                                    thêm sản phẩm khác
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                ))}
             </div>
         </div>
     )

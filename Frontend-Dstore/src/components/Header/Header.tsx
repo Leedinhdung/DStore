@@ -1,6 +1,7 @@
 import { FaPhoneAlt } from "react-icons/fa";
-import { FaCartShopping } from "react-icons/fa6";
+import {FaCartShopping, FaUser} from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import routes from "@/routes/routes";
 const Header = () => (
     <header className="bg-blue-600 text-white">
         <div className="max-w-screen-xl mx-auto flex justify-between items-center px-4 py-3">
@@ -18,9 +19,13 @@ const Header = () => (
                         <span className="font-bold"> 094.1144.666</span>
                     </div>
                 </div>
-                <Link to={'/cart'} className="flex items-center gap-2 cursor-pointer ">
+                <Link to={routes.cart} className="flex items-center gap-2 cursor-pointer ">
                     <FaCartShopping className="text-2xl" />
                     <p className="text-base"> Giỏ hàng</p>
+                </Link>
+                <Link to={routes.login} className="flex items-center gap-2 cursor-pointer ">
+                    <FaUser className="text-2xl" />
+                    {/*<p className="text-base"> Đăng nhập</p>*/}
                 </Link>
             </div>
         </div>

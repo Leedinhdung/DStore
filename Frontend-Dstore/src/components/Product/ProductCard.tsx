@@ -1,4 +1,6 @@
 import { useState } from "react"
+import {Link} from "react-router-dom";
+import routes from "@/routes/routes";
 
 const ProductCard = () => {
   const [isFavorite, setIsFavorite] = useState(false)
@@ -16,18 +18,20 @@ const ProductCard = () => {
 
       <div className="p-4">
         {/* Product Image */}
-        <div className="relative mb-4 flex justify-center">
-          <img
-            src="https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg"
-            alt="Tai nghe Skullcandy"
-            className=" h-48 object-contain transition-transform duration-300 hover:scale-110"
-          />
-        </div>
+        <Link to={routes.detailProduct} className='cursor-pointer'>
+          <div className="relative mb-4 flex justify-center">
+            <img
+                src="https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg"
+                alt="Tai nghe Skullcandy"
+                className=" h-48 object-contain transition-transform duration-300 hover:scale-110"
+            />
+          </div>
 
-        {/* Product Title */}
-        <h3 className="text-gray-800 font-medium text-base mb-3 line-clamp-2">
-          Tai nghe Skullcandy CRUSHER EVO ALL LOVE...
-        </h3>
+          {/* Product Title */}
+          <h3 className="text-gray-800 font-medium text-base mb-3 line-clamp-2 hover:text-blue-400">
+            Tai nghe Skullcandy CRUSHER EVO ALL LOVE...
+          </h3>
+        </Link>
 
         {/* Price Section */}
         <div className="mb-4">
@@ -40,7 +44,7 @@ const ProductCard = () => {
         {/* Rating */}
         <div className="flex items-center mb-4">
           {[...Array(5)].map((_, index) => (
-            <svg key={index} className="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 24 24">
+              <svg key={index} className="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 24 24">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
           ))}
