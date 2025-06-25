@@ -33,34 +33,50 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link" href="#sidebarDashboards" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+                        <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                </li> <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarBanner" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarBanner">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Banner</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarBanner">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics"> Analytics
+                                <a href="{{route('admin.banner.index')}}" class="nav-link" > Danh sách
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
+                            {{-- <li class="nav-item">
+                                <a href="dashboard-crm.html" class="nav-link" > CRM </a>
                             </li>
                             <li class="nav-item">
-                                <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
+                                <a href="index.html" class="nav-link" > Ecommerce </a>
+                            </li> --}}
+
+                        </ul>
+                    </div>
+                </li> <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarCategory">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý danh mục</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarCategory">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.category.index')}}" class="nav-link" > Danh sách
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item">
+                                <a href="dashboard-crm.html" class="nav-link" > CRM </a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects.html" class="nav-link" data-key="t-projects"> Projects </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
-                            </li>
+                                <a href="index.html" class="nav-link" > Ecommerce </a>
+                            </li> --}}
+
                         </ul>
                     </div>
                 </li> <!-- end Dashboard Menu -->
