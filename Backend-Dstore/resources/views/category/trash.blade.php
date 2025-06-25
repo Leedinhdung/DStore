@@ -45,66 +45,67 @@
                         </tr>
                         </thead>
                         <tbody>
-                       @if($categories->isNotEmpty())
-                           @php
-                               $i=0
-                           @endphp
-                           @foreach($categories as $cat)
-                               @php
-                                   $i++
-                               @endphp
+                        @if($categories->isNotEmpty())
+                            @php
+                                $i=0
+                            @endphp
+                            @foreach($categories as $cat)
+                                @php
+                                    $i++
+                                @endphp
 
-                               <tr>
-                                   <th scope="row">
-                                       <div class="form-check">
-                                           <input class="form-check-input fs-15" type="checkbox" name="checkAll"
-                                                  value="option1">
-                                       </div>
-                                   </th>
-                                   <td>{{$i}}</td>
-                                   <td>{{$cat->name}}</td>
-                                   <td>{{strip_tags($cat->description)}}</td>
-                                   <td>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="form-check">
+                                            <input class="form-check-input fs-15" type="checkbox" name="checkAll"
+                                                   value="option1">
+                                        </div>
+                                    </th>
+                                    <td>{{$i}}</td>
+                                    <td>{{$cat->name}}</td>
+                                    <td>{{strip_tags($cat->description)}}</td>
+                                    <td>
                                     <span class="text-info">
                                         @if($cat->parent)
                                             {{$cat->parent->name}}
                                         @endif
                                     </span>
-                                   </td>
-                                   <td>
-                                       {!!  $cat->status==='active'
-                                           ? ' <span class="badge bg-primary">Hoạt động</span>'
-                                           :' <span class="badge bg-danger">Không hoạt động</span>'
-                                       !!}
-                                   </td>
-                                   <td>
-                                       <div class="dropdown d-inline-block">
-                                           <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                               <i class="ri-more-fill align-middle"></i>
-                                           </button>
-                                           <ul class="dropdown-menu dropdown-menu-end">
-                                               <li><a href="{{route('admin.category.restore',$cat->id)}}"
-                                                      class="dropdown-item edit-item-btn"><i
-                                                           class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                       Khôi phục</a></li>
-                                               <li>
-                                                   <a href="{{route('admin.category.destroy',$cat->id)}}"
-                                                      class="dropdown-item remove-item-btn">
-                                                       <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                       Xóa
-                                                   </a>
-                                               </li>
-                                           </ul>
-                                       </div>
-                                   </td>
-                               </tr>
-                           @endforeach
-                       @else
-                           <tr>
-                               <td colspan="7" class="text-center text-muted fs-18">Chưa có bản ghi nào được xóa</td>
-                           </tr>
-                       @endif
+                                    </td>
+                                    <td>
+                                        {!!  $cat->status==='active'
+                                            ? ' <span class="badge bg-primary">Hoạt động</span>'
+                                            :' <span class="badge bg-danger">Không hoạt động</span>'
+                                        !!}
+                                    </td>
+                                    <td>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ri-more-fill align-middle"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a href="{{route('admin.category.restore',$cat->id)}}"
+                                                       class="dropdown-item edit-item-btn"> <i
+                                                            class="fa-solid fa-arrows-rotate me-2 text-muted"></i>
+                                                        Khôi phục</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{route('admin.category.destroy',$cat->id)}}"
+                                                       class="dropdown-item remove-item-btn">
+                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                        Xóa
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="7" class="text-center text-muted fs-18">Chưa có bản ghi nào được xóa</td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
                 </div>

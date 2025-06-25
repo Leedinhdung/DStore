@@ -23,9 +23,14 @@ Route::prefix('quan-tri')->as('admin.')->group(function () {
         //Banner
         Route::prefix('banner')->as('banner.')->group(function () {
             Route::get('/danh-sach', [BannerController::class, 'index'])->name('index');
+            Route::get('/thung-rac', [BannerController::class, 'trash'])->name('trash');
             Route::get('/danh-sach/them-moi', [BannerController::class, 'create'])->name('create');
+            Route::post('/danh-sach/them-moi', [BannerController::class, 'store'])->name('store');
             Route::get('/danh-sach/sua/{id}', [BannerController::class, 'edit'])->name('edit');
-            Route::put('/danh-sach/sua/{id}', [BannerController::class, 'edit'])->name('update');
+            Route::put('/danh-sach/sua/{id}', [BannerController::class, 'update'])->name('update');
+            Route::get('/danh-sach/xoa/{id}', [BannerController::class, 'softDelete'])->name('softDelete');
+            Route::get('/danh-sach/xoa-vinh-vien/{id}', [BannerController::class, 'destroy'])->name('destroy');
+            Route::get('/danh-sach/khoi-phuc/{id}', [BannerController::class, 'restore'])->name('restore');
         });
 
         //Category
