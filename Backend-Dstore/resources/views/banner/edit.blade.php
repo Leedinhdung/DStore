@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    Sửa banner
+    Thêm mới
 @endsection
 @section('content')
     <div class="row">
@@ -11,7 +11,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{route('admin.banner.index')}}">Danh sách banner</a></li>
-                        <li class="breadcrumb-item active">Sửa</li>
+                        <li class="breadcrumb-item active">Sửa banner</li>
                     </ol>
                 </div>
 
@@ -19,8 +19,53 @@
         </div>
     </div>
     <!-- end page title -->
-    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate>
+    <form action="{{route('admin.banner.update',$banner->id)}}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
         <div class="row">
+            <div class="card">
+                <div class="row">
+                    <div class=" col-8">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="choices-publish-status-input" class="form-label">Đường dẫn</label>
+                                <input type="text" name="url" value="{{$banner->url}}" class="form-control" placeholder="Nhập đường dẫn ảnh">
+                                @error('url')
+                                <div class="text-danger my-2"> {{$message}} </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-4">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="choices-publish-status-input" class="form-label">Trạng thái</label>
+
+                                <select class="form-select" name="status">
+                                    <option
+                                        value="active" {{ old('status', $banner->status ?? '') == 'active' ? 'selected' : '' }}>
+                                        Hoạt động
+                                    </option>
+                                    <option
+                                        value="inactive" {{ old('status', $banner->status ?? '') == 'inactive' ? 'selected' : '' }}>
+                                        Không hoạt động
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                </div>
+            </div>
+            <div class="card p-5">
+              <div class="mx-auto">
+                  @if (!empty($banner->url))
+                      <img src="{{ $banner->url }}" width="500px" class="rounded-2" alt="">
+                  @else
+                      <img src="{{ Storage::url($banner->image) }}" width="=500px" alt="">
+                  @endif
+              </div>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Ảnh banner</h5>
@@ -29,51 +74,16 @@
                     <div>
                         <h5 class="fs-14 mb-1">Ảnh</h5>
                         <p class="text-muted">Thêm ảnh banner.</p>
-
-                        <div class="dropzone">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple="multiple">
-                            </div>
-                            <div class="dz-message needsclick">
-                                <div class="mb-3">
-                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                </div>
-
-                                <h5>Drop files here or click to upload.</h5>
-                            </div>
-                        </div>
-
-                        <ul class="list-unstyled mb-0" id="dropzone-preview">
-                            <li class="mt-2" id="dropzone-preview-list">
-                                <!-- This is used as the file preview template -->
-                                <div class="border rounded">
-                                    <div class="d-flex p-2">
-                                        <div class="flex-shrink-0 me-3">
-                                            <div class="avatar-sm bg-light rounded">
-                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="#" alt="Product-Image" />
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <div class="pt-1">
-                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                <strong class="error text-danger" data-dz-errormessage></strong>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0 ms-3">
-                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <!-- end dropzon-preview -->
+                        <input type="file" class="form-control" name="image">
+                        @error('image')
+                        <div class="text-danger my-2"> {{$message}} </div>
+                        @enderror
                     </div>
                 </div>
             </div>
             <!-- end card -->
             <div class="text-end mb-3">
-                <button type="submit" class="btn btn-success w-sm">Submit</button>
+                <button type="submit" class="btn btn-success w-sm">Sửa</button>
             </div>
             <!-- end col -->
         </div>
@@ -81,9 +91,10 @@
     </form>
 @endsection
 @section('style-libs')
-    <link href="{{asset('assets/libs/dropzone/dropzone.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/libs/dropzone/dropzone.css')}}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('script-libs')
+
     <script src="{{asset('assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')}}"></script>
 
     <!-- dropzone js -->
