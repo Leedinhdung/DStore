@@ -88,7 +88,9 @@ class BannerController extends Controller
                 if (!empty($banner->image) && Storage::exists($banner->image)) {
                     Storage::delete($banner->image);
                 }
-                $data['image'] = Storage::putFileAs('banners', $request->file('image'), $banner->image);
+                $image = $request->file('image');
+                $newNameImage = 'banner_' . time() . '.' . $image->getClientOriginalExtension();
+                $data['image'] = Storage::putFileAs('banners', $request->file('image'),$newNameImage);
             }
             $banner->update($data);
             DB::commit();

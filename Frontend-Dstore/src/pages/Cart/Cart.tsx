@@ -7,8 +7,9 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import routes from "@/routes/routes";
-const Cart = () => {
+import CartItem from "@/components/cart/CartItem";
 
+const Cart = () => {
     const cart = useSelector((state: RootState) => state.cart)
     const dispatch = useDispatch()
 
@@ -23,11 +24,12 @@ const Cart = () => {
         }
     }
     const totalAmount = useMemo(() => {
-        return cart.products.reduce((a, b) => a + b.price * b.quantity, 0)
+        return cart.products.reduce((total, product) => total + product.price * product.quantity, 0)
     }, [cart.products])
-    return (
-        <div className="max-w-screen-xl mx-auto">
-            <Stack spacing={2}>
+
+    if (cart.products.length === 0) {
+        return (
+            <div className="max-w-screen-xl mx-auto">
                 <Breadcrumbs
                     separator={<FaChevronRight fontSize="small" />}
                     aria-label="breadcrumb">
@@ -36,101 +38,65 @@ const Cart = () => {
                     </Link>
                     <Typography color="text.primary">Thông tin giỏ hàng</Typography>
                 </Breadcrumbs>
-            </Stack>
-            <div className=" max-w-screen-md mx-auto">
-                {cart.products.length === 0 ? (
+
+                <div className="max-w-screen-md mx-auto">
                     <div className='flex flex-col gap-5 text-center my-32'>
-                        <p className='font-bold text-base '> Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
-
-                        <Link to={routes.home} className='text-red-500 font-medium'>Quay lại trang chủ</Link>
+                        <p className='font-bold text-base'>
+                            Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại
+                        </p>
+                        <Link to={routes.home} className='text-red-500 font-medium'>
+                            Quay lại trang chủ
+                        </Link>
                     </div>
-                ) : cart.products.map((i, index) => (
-                    <div className="flex flex-col gap-5">
-                        <div className="flex ">
-                            <Link to={routes.detailProduct} className="flex items-center gap-1 font-bold"><FaChevronLeft /> Trở về</Link>
-                            <h2 className="mx-auto font-bold">Giỏ hàng</h2>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-screen-xl mx-auto">
+            <Breadcrumbs
+                separator={<FaChevronRight fontSize="small" />}
+                aria-label="breadcrumb">
+                <Link color="inherit" to={routes.home}>
+                    Trang chủ
+                </Link>
+                <Typography color="text.primary">Thông tin giỏ hàng</Typography>
+            </Breadcrumbs>
+
+            <div className="max-w-screen-md mx-auto">
+                <div className="flex flex-col gap-5">
+                    <div className="flex">
+                        <Link to={routes.detailProduct} className="flex items-center gap-1 font-bold">
+                            ← Trở về
+                        </Link>
+                        <h2 className="mx-auto font-bold">Giỏ hàng</h2>
+                    </div>
+
+                    {/* Cart Items */}
+                    {cart.products.map((item, index) => (
+                        <CartItem key={`cart-item-${item.id}`} item={item} index={index} />
+                    ))}
+
+                    {/* Cart Summary */}
+                    <div className="flex flex-col gap-5 shadow rounded-xl p-3 border">
+                        <div className="flex justify-between font-bold">
+                            <p>Tổng tiền tạm tính:</p>
+                            <p>{priceFormat(totalAmount)}</p>
                         </div>
-                        <div className="shadow border p-3 rounded-xl">
-                            <div className="grid grid-cols-6 gap-4 ">
-                                {/* Cột ảnh và nút xóa */}
-                                <div className="col-span-2 flex flex-col items-center justify-between">
-                                    <img
-                                        src={i.image}
-                                        className="w-36"
-                                        alt={i.name}
-                                    />
-                                    <Button className="mt-6 text-red-600 hover:text-red-800"
-                                        onClick={() => dispatch(removeFromCart(i))}>Xóa</Button>
-                                </div>
-
-                                {/* Cột thông tin sản phẩm */}
-
-                                <div className="col-span-4 space-y-3" key={`cart-item-${index}`}>
-                                    <p className="font-medium text-lg">
-                                        {i.name}
-                                    </p>
-                                    <p>Màu sắc: <span className="font-medium">{i.color}</span></p>
-
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-5">
-                                            <p className="text-lg font-semibold text-red-600">{priceFormat(i.price)}</p>
-                                            <del
-                                                className="text-gray-500 text-sm font-medium">{priceFormat(i.priceOrigin)}</del>
-                                        </div>
-                                        <div
-                                            className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                                            {percentFormat((i.priceOrigin - i.price) / i.priceOrigin)}
-                                        </div>
-                                    </div>
-
-                                    {/* Chọn số lượng */}
-                                    <div className="flex items-center gap-3">
-                                        <p>Chọn số lượng:</p>
-                                        <div
-                                            className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white w-fit">
-                                            <button
-                                                onClick={() => descrea(i)}
-                                                className="w-7 h-5 flex items-center justify-center hover:bg-gray-100"
-                                            >
-                                                −
-                                            </button>
-                                            <div
-                                                className="w-12 h-7 flex items-center justify-center border-x border-gray-300 font-medium">
-                                                {i.quantity}
-                                            </div>
-                                            <button
-                                                onClick={() => inscrea(i)}
-                                                className="w-7 h-5 flex items-center justify-center hover:bg-gray-100"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-5 shadow rounded-xl p-3 border">
-                            <div className="flex justify-between font-bold">
-                                <p>Tổng tiền tạm tính:</p>
-                                <p>{priceFormat(totalAmount)}</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <button
-                                    className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">Tiến
-                                    hành đặt hàng
-                                </button>
-                                <button
-                                    className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">Chọn
-                                    thêm sản phẩm khác
-                                </button>
-                            </div>
+                        <div className="flex flex-col gap-2">
+                            <button className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">
+                                Tiến hành đặt hàng
+                            </button>
+                            <button className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">
+                                Chọn thêm sản phẩm khác
+                            </button>
                         </div>
                     </div>
-                ))}
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Cart

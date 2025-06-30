@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,20 @@ Route::prefix('quan-tri')->as('admin.')->group(function () {
             Route::get('/danh-sach/xoa/{id}', [CategoryController::class, 'softDelete'])->name('softDelete');
             Route::get('/danh-sach/xoa-vinh-vien/{id}', [CategoryController::class, 'destroy'])->name('destroy');
             Route::get('/danh-sach/khoi-phuc/{id}', [CategoryController::class, 'restore'])->name('restore');
+        });
+
+        //Product
+        Route::prefix('san-pham')->as('product.')->group(function () {
+            Route::get('/danh-sach', [ProductController::class, 'index'])->name('index');
+            Route::get('/thung-rac', [ProductController::class, 'trash'])->name('trash');
+            Route::get('/danh-sach/them-moi', [ProductController::class, 'create'])->name('create');
+            Route::post('/danh-sach/them-moi', [ProductController::class, 'store'])->name('store');
+            Route::get('/danh-sach/chi-tiet/{id}', [ProductController::class, 'show'])->name('show');
+            Route::get('/danh-sach/sua/{id}', [ProductController::class, 'edit'])->name('edit');
+            Route::put('/danh-sach/sua/{id}', [ProductController::class, 'update'])->name('update');
+            Route::get('/danh-sach/xoa/{id}', [ProductController::class, 'softDelete'])->name('softDelete');
+            Route::get('/danh-sach/xoa-vinh-vien/{id}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::get('/danh-sach/khoi-phuc/{id}', [ProductController::class, 'restore'])->name('restore');
         });
     });
 });

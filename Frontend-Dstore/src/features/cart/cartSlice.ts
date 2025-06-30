@@ -1,4 +1,4 @@
-import { Product } from "@/types/Product";
+import { Product } from "@/constants/data";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface CartProduct extends Product {
