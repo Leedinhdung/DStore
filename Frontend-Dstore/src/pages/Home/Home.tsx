@@ -1,135 +1,35 @@
 import Banner from '@/components/Banner/Banner';
 import Post from '@/components/Post/Post';
-import ProductCard from '@/components/Product/ProductCard';
 import Review from '@/components/Review/Review';
-import { Product } from '@/types/Product';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
-import 'swiper/css';
+import ProductCard from '@/components/Product/ProductCard';
+import ProductSection from '@/components/sections/ProductSection';
+import { useProducts } from '@/hooks/useProducts';
+import { HEADPHONE_TABS, SPEAKER_TABS, SWIPER_BREAKPOINTS, SWIPER_BREAKPOINTS_SMALL, IMAGES } from '@/constants/data';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-export const tabsHeadPhone = [
-	{
-		label: 'Tai nghe true wireless',
-		value: 'trueWireless',
-	},
-	{
-		label: 'Tai nghe bluetooth',
-		value: 'bluetooth',
-	},
-	{
-		label: 'Tai nghe có dây',
-		value: 'wired',
-	},
-];
-export const tabsSpeaker = [
-	{
-		label: 'Loa vi tính',
-		value: 'speakerPC',
-	},
-	{
-		label: 'Loa kiểm âm',
-		value: 'bluetooth',
-	},
-	{
-		label: 'Tai nghe có dây',
-		value: 'wired',
-	},
-];
-
-export const productsData: { [type: string]: Product[] } = {
-	trueWireless: [
-		{
-			id: 1,
-			color: 'Yellow',
-			name: 'AirPods Pro 2',
-			price: 5500000,
-			priceOrigin: 6050000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		},
-		{
-			id: 2,
-			color: 'Yellow',
-			name: 'Soundcore Liberty 4',
-			price: 2690000,
-			priceOrigin: 2959000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		}
-	],
-	bluetooth: [
-		{
-			id: 3,
-			color: 'Yellow',
-			name: 'Sony WH-CH520',
-			price: 1490000,
-			priceOrigin: 1639000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		},
-		{
-			id: 4,
-			color: 'Yellow',
-			name: 'JBL Tune 510BT',
-			price: 1190000,
-			priceOrigin: 1309000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		}
-	],
-	wired: [
-		{
-			id: 5,
-			color: 'Yellow',
-			name: 'KZ ZSN Pro X',
-			price: 490000,
-			priceOrigin: 539000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		},
-		{
-			id: 6,
-			color: 'Yellow',
-			name: 'CCA CRA+',
-			price: 390000,
-			priceOrigin: 429000,
-			image: 'https://songlongmedia.com/media/product/250_3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg'
-		}
-	]
-};
+import 'swiper/css';
 
 const Home = () => {
-	const [activeTab, setActiveTab] = useState('');
+	const { activeTab, products, onTabActive } = useProducts();
 
-	const [products, setProducts] = useState<Product[]>([]);
-
-	const onTabActive = (value: string) => {
-		setActiveTab(value);
-	};
-
-	const loadProducts = useCallback(() => {
-		// load product by tab
-		let data = productsData[activeTab];
-		if (!activeTab) {
-			data = Object.values(productsData).flat()
-		}
-		setProducts(data);
-	}, [activeTab]);
-
-	useEffect(() => {
-		loadProducts();
-	}, [activeTab]);
 	return (
 		<div>
 			<Banner />
+
+			{/* Promotional Banner */}
 			<div className="max-w-screen-xl mx-auto px-4 py-6">
 				<img
-					src="https://songlongmedia.com/media/banner/09_Maye732e344e8d2b51085a4e72cfaa773d2.png"
-					alt=""
+					src={IMAGES.PROMOTIONAL_BANNER}
+					alt="Promotional Banner"
 					className="w-full rounded-xl shadow"
 				/>
 			</div>
+
+			{/* Flash Sale Section */}
 			<div className="max-w-screen-xl mx-auto px-4 py-6 relative">
 				<img
-					src="https://songlongmedia.com/static/assets/2023/images/home-deal-bg.png"
-					alt=""
+					src={IMAGES.FLASH_SALE_BG}
+					alt="Flash Sale Background"
 					className="w-full rounded-xl shadow"
 				/>
 
@@ -146,17 +46,12 @@ const Home = () => {
 					<div className="mt-6">
 						<Swiper
 							spaceBetween={16}
-							breakpoints={{
-								320: { slidesPerView: 1 },
-								640: { slidesPerView: 2 },
-								768: { slidesPerView: 3 },
-								1024: { slidesPerView: 4 },
-								1280: { slidesPerView: 5 },
-							}}
+							breakpoints={SWIPER_BREAKPOINTS}
 							loop
 							autoplay={{ delay: 3000 }}
 							modules={[Autoplay]}
-							className="h-full">
+							className="h-full"
+						>
 							{[...Array(6)].map((_, i) => (
 								<SwiperSlide key={i}>
 									<ProductCard />
@@ -166,217 +61,60 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Headphones Section */}
+			<ProductSection
+				title="Tai nghe"
+				tabs={HEADPHONE_TABS}
+				products={products}
+				activeTab={activeTab}
+				onTabChange={onTabActive}
+			/>
+
+			{/* Speakers Section */}
+			<ProductSection
+				title="Loa"
+				tabs={SPEAKER_TABS}
+				products={products}
+				activeTab={activeTab}
+				onTabChange={onTabActive}
+			/>
+
+			{/* Technology News Section */}
 			<div className="max-w-screen-xl mx-auto px-4 py-6">
 				<div>
-
-					<Stack direction="row" justifyContent="space-between">
-						<Box bgcolor="#1781E0" borderRadius={1}>
-							<Typography variant='h6' className='uppercase font-medium ' px={1} color='#fff'>
-								Tai nghe
-							</Typography>
-						</Box>
-						<Stack direction="row" spacing={1}>
-							{tabsHeadPhone?.map((tab, index) => (
-								<Button
-									size="small"
-									sx={{
-										border: 1,
-										backgroundColor: activeTab === tab.value ? '#1781E0' : 'white',
-										color: activeTab === tab.value ? 'white' : 'black',
-										'&:hover': {
-											backgroundColor: '#1781E0',
-											color: 'white',
-										},
-									}}
-									key={index}
-									type="button"
-									onClick={() => onTabActive(tab.value)}
-								>
-									{tab.label}
-								</Button>
-							))}
-							<Button
-								size="small"
-								onClick={() => onTabActive('')}
-								type='button'
-								sx={{
-									border: 1,
-									backgroundColor: !activeTab ? '#1781E0' : 'white',
-									color: !activeTab ? 'white' : 'black',
-									'&:hover': {
-										backgroundColor: '#1781E0',
-										color: 'white',
-									},
-								}}
-							>
-								Xem tất cả
-							</Button>
-
-						</Stack>
-					</Stack>
+					<div className="flex justify-between items-center mb-5">
+						<div className="bg-[#1781E0] rounded px-3 py-1">
+							<h3 className="text-white font-medium uppercase">Tin công nghệ</h3>
+						</div>
+						<button className="border border-gray-300 px-3 py-1 rounded hover:bg-[#1781E0] hover:text-white">
+							Xem tất cả
+						</button>
+					</div>
 
 					<Swiper
 						spaceBetween={16}
-						breakpoints={{
-							320: { slidesPerView: 1 },
-							640: { slidesPerView: 2 },
-							768: { slidesPerView: 3 },
-							1024: { slidesPerView: 4 },
-							1280: { slidesPerView: 5 },
-						}}
+						breakpoints={SWIPER_BREAKPOINTS_SMALL}
 						loop
 						autoplay={{ delay: 3000 }}
 						modules={[Autoplay]}
-						className="h-full mt-5">
-						<Stack direction="row" spacing={5}>
-							{products.map((i, index) => (
-								<SwiperSlide key={`tab-${index}`}>
-									<ProductCard />
-								</SwiperSlide>
-							))}
-						</Stack>
+						className="h-full mt-5"
+					>
+						{[...Array(4)].map((_, i) => (
+							<SwiperSlide key={i}>
+								<Post />
+							</SwiperSlide>
+						))}
 					</Swiper>
-
-
 				</div>
 			</div>
+
+			{/* Customer Reviews Section */}
 			<div className="max-w-screen-xl mx-auto px-4 py-6">
 				<div>
-
-					<Stack direction="row" justifyContent="space-between">
-						<Box bgcolor="#1781E0" borderRadius={1}>
-							<Typography variant='h6' className='uppercase font-medium ' px={1} color='#fff'>
-								Loa
-							</Typography>
-						</Box>
-						<Stack direction="row" spacing={1}>
-							{tabsSpeaker?.map((tab, index) => (
-								<Button
-									size="small"
-									sx={{
-										border: 1,
-										backgroundColor: activeTab === tab.value ? '#1781E0' : 'white',
-										color: activeTab === tab.value ? 'white' : 'black',
-										'&:hover': {
-											backgroundColor: '#1781E0',
-											color: 'white',
-										},
-									}}
-									key={index}
-									type="button"
-									onClick={() => onTabActive(tab.value)}
-								>
-									{tab.label}
-								</Button>
-							))}
-							<Button
-								size="small"
-								onClick={() => onTabActive('')}
-								type='button'
-								sx={{
-									border: 1,
-									backgroundColor: !activeTab ? '#1781E0' : 'white',
-									color: !activeTab ? 'white' : 'black',
-									'&:hover': {
-										backgroundColor: '#1781E0',
-										color: 'white',
-									},
-								}}
-							>
-								Xem tất cả
-							</Button>
-
-						</Stack>
-					</Stack>
-
-					<Swiper
-						spaceBetween={16}
-						breakpoints={{
-							320: { slidesPerView: 1 },
-							640: { slidesPerView: 2 },
-							768: { slidesPerView: 3 },
-							1024: { slidesPerView: 4 },
-							1280: { slidesPerView: 5 },
-						}}
-						loop
-						autoplay={{ delay: 3000 }}
-						modules={[Autoplay]}
-						className="h-full mt-5">
-						<Stack direction="row" spacing={5}>
-							{products.map((i, index) => (
-								<SwiperSlide key={`tab-${index}`}>
-									<ProductCard />
-								</SwiperSlide>
-							))}
-						</Stack>
-					</Swiper>
-
-
-				</div>
-			</div>
-			<div className="max-w-screen-xl mx-auto px-4 py-6">
-				<div>
-
-					<Stack direction="row" justifyContent="space-between">
-						<Box bgcolor="#1781E0" borderRadius={1}>
-							<Typography variant='h6' className='uppercase font-medium ' px={1} color='#fff'>
-								Tin công nghệ
-							</Typography>
-						</Box>
-						<Stack direction="row" spacing={1}>
-							<Button
-								size="small"
-								onClick={() => onTabActive('')}
-								type='button'
-								sx={{
-									border: 1,
-									'&:hover': {
-										backgroundColor: '#1781E0',
-										color: 'white',
-									},
-								}}
-							>
-								Xem tất cả
-							</Button>
-
-						</Stack>
-					</Stack>
-
-					<Swiper
-						spaceBetween={16}
-						breakpoints={{
-							320: { slidesPerView: 1 },
-							640: { slidesPerView: 2 },
-							768: { slidesPerView: 2 },
-							1024: { slidesPerView: 3 },
-							1280: { slidesPerView: 4 },
-						}}
-						loop
-						autoplay={{ delay: 3000 }}
-						modules={[Autoplay]}
-						className="h-full mt-5">
-						<Stack direction="row" spacing={5}>
-							{products.map((i, index) => (
-								<SwiperSlide key={`tab-${index}`}>
-									<Post />
-								</SwiperSlide>
-							))}
-						</Stack>
-					</Swiper>
-
-
-				</div>
-			</div>
-			<div className="max-w-screen-xl mx-auto px-4 py-6">
-				<div>
-
-					<Stack direction="row" justifyContent="space-between">
-						<Box bgcolor="#1781E0" borderRadius={1}>
-							<Typography variant='h6' className='uppercase font-medium ' px={1} color='#fff'>
-								Đánh giá từ khách hàng
-							</Typography>
-						</Box>
-					</Stack>
+					<div className="bg-[#1781E0] rounded px-3 py-1 w-fit mb-5">
+						<h3 className="text-white font-medium uppercase">Đánh giá từ khách hàng</h3>
+					</div>
 
 					<Swiper
 						spaceBetween={16}
@@ -390,17 +128,14 @@ const Home = () => {
 						loop
 						autoplay={{ delay: 5000 }}
 						modules={[Autoplay]}
-						className="h-full mt-5">
-						<Stack direction="row" spacing={5}>
-							{products.map((i, index) => (
-								<SwiperSlide key={`tab-${index}`}>
-									<Review />
-								</SwiperSlide>
-							))}
-						</Stack>
+						className="h-full mt-5"
+					>
+						{[...Array(4)].map((_, i) => (
+							<SwiperSlide key={i}>
+								<Review />
+							</SwiperSlide>
+						))}
 					</Swiper>
-
-
 				</div>
 			</div>
 		</div>

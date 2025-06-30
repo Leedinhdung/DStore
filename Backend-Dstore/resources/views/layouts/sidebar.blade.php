@@ -20,7 +20,7 @@
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover">
+                id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
@@ -34,19 +34,19 @@
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('admin.dashboard')}}" role="button"
-                        aria-expanded="false" aria-controls="sidebarDashboards">
+                       aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarBanner" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarBanner">
+                       aria-expanded="false" aria-controls="sidebarBanner">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý banner</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarBanner">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.banner.index')}}" class="nav-link" > Danh sách
+                                <a href="{{route('admin.banner.index')}}" class="nav-link"> Danh sách
                                 </a>
                             </li>
                             {{-- <li class="nav-item">
@@ -61,13 +61,13 @@
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarCategory">
+                       aria-expanded="false" aria-controls="sidebarCategory">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý danh mục</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarCategory">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.category.index')}}" class="nav-link" > Danh sách
+                                <a href="{{route('admin.category.index')}}" class="nav-link"> Danh sách
                                 </a>
                             </li>
                             {{-- <li class="nav-item">
@@ -79,6 +79,11 @@
 
                         </ul>
                     </div>
+                </li> <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('admin.product.index')}}">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý sản phẩm</span>
+                    </a>
                 </li> <!-- end Dashboard Menu -->
             </ul>
         </div>
