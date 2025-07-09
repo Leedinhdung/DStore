@@ -20,7 +20,7 @@ class User extends Authenticatable
     const TYPE_ADMIN='admin';
     const TYPE_MEMBER='member';
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
         'password',
         'type'
