@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Admin\Category;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCategoryRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,12 +18,12 @@ class UpdateCategoryRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:255',
+            'name' => 'required|string|min:3|max:255|unique:categories,name',
             'description' => 'nullable|string|min:3|max:255',
             'parent_id' => 'nullable|exists:categories,id',
         ];
@@ -32,6 +33,8 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'Vui lòng nhập tên danh mục.',
+            'name.string' => 'Tên danh mục phải là chuỗi.',
+            'name.unique' => 'Tên danh mục đã tồn tại.',
             'name.max' => 'Tên danh mục không được vượt quá 255 ký tự.',
 
             'description.string' => 'Mô tả phải là chuỗi.',

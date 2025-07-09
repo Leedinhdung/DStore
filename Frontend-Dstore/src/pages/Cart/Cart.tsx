@@ -1,28 +1,16 @@
 import { RootState } from "@/app/store"
-import { CartProduct, removeFromCart, updateQuantityProduct } from "@/features/cart/cartSlice"
-import { percentFormat, priceFormat } from "@/helpers/formatHelper"
-import { Breadcrumbs, Button, Stack, Typography } from "@mui/material"
+import { priceFormat } from "@/helpers/formatHelper"
+import { Breadcrumbs, Typography } from "@mui/material"
 import { useMemo } from "react"
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
-import { useDispatch, useSelector } from "react-redux"
+import { FaChevronRight } from "react-icons/fa"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import routes from "@/routes/routes";
 import CartItem from "@/components/cart/CartItem";
 
 const Cart = () => {
     const cart = useSelector((state: RootState) => state.cart)
-    const dispatch = useDispatch()
 
-    const inscrea = (i: CartProduct) => {
-        dispatch(updateQuantityProduct({ id: i.id, quantity: i.quantity + 1 }))
-    }
-    const descrea = (i: CartProduct) => {
-        if (i.quantity <= 1) {
-            alert('Số lượng sản phẩm phải lớn hơn 0')
-        } else {
-            dispatch(updateQuantityProduct({ id: i.id, quantity: i.quantity - 1 }))
-        }
-    }
     const totalAmount = useMemo(() => {
         return cart.products.reduce((total, product) => total + product.price * product.quantity, 0)
     }, [cart.products])
