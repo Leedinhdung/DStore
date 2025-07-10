@@ -1,30 +1,56 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { EyeIcon, EyeOffIcon, UserIcon, LockIcon } from 'lucide-react'
 import { loginSchema, type LoginFormData } from '@/utils/validation'
+import { useLogin } from '@/hooks/auth/useAuth'
+import { toast } from 'sonner'
+import routes from '@/routes/routes'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { mutateAsync, isPending } = useLogin()
 
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token')
+    const user = localStorage.getItem('user_data')
+
+    if (accessToken && user) {
+      navigate(routes.home)
+    }
+  }, [navigate])
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
-    mode: 'onChange', // Validate on change
+    mode: 'onChange',
   })
 
-  const onSubmit = (data: LoginFormData) => {
-    setIsLoading(true)
-    // Here you would typically call your authentication API
-    setTimeout(() => {
-      console.log('Login form submitted:', data)
-      setIsLoading(false)
-      alert('Đăng nhập thành công (demo)')
-    }, 1500)
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await mutateAsync(data)
+    } catch (error: any) {
+      const errors = error?.response?.data?.errors
+
+      if (Array.isArray(errors)) {
+        errors.forEach((errorItem: Record<string, string>) => {
+          Object.entries(errorItem).forEach(([field, message]) => {
+            setError(field as keyof LoginFormData, {
+              type: 'manual',
+              message,
+            })
+          })
+        })
+      } else {
+        toast.error(error?.response?.data?.message || 'Đăng nhập thất bại')
+      }
+    }
   }
 
   return (
@@ -125,10 +151,10 @@ const Login = () => {
       <div>
         <button
           type="submit"
-          disabled={isLoading}
-          className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${isLoading ? 'opacity-80 cursor-not-allowed' : ''}`}
+          disabled={isPending}
+          className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${isPending ? 'opacity-80 cursor-not-allowed' : ''}`}
         >
-          {isLoading ? (
+          {isPending ? (
             <>
               <svg
                 className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
