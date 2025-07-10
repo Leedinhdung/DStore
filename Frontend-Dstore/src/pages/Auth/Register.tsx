@@ -4,9 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { EyeIcon, EyeOffIcon, UserIcon, LockIcon, MailIcon } from 'lucide-react'
 import { registerSchema, type RegisterFormData } from '@/utils/validation'
 import { toast } from 'sonner'
-import { useRegister, useVerifyOTP } from '@/hooks/auth/useAuth'
+import { useRegister } from '@/hooks/auth/useAuth'
 import { SuccessModal } from '@/components/modals'
 import OtpVerification from '@/components/Otp/OtpVerification'
+import { useVerifyOTP } from '@/hooks/auth/useOTP'
 
 
 interface RegisterProps {
