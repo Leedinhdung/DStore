@@ -6,7 +6,6 @@ import { ILogin, ISignUp } from "@/types/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { c } from "vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 
 export const useRegister = () => {
 	return useMutation({
