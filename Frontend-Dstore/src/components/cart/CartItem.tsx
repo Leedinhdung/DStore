@@ -3,15 +3,13 @@ import { percentFormat, priceFormat } from "@/helpers/formatHelper";
 import { validateQuantity } from "@/utils/validation";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import routes from "@/routes/routes";
 
 interface CartItemProps {
     item: CartProduct;
     index: number;
 }
 
-const CartItem = ({ item, index }: CartItemProps) => {
+const CartItem = ({ item }: CartItemProps) => {
     const dispatch = useDispatch();
 
     const increaseQuantity = () => {

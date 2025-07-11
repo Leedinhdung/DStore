@@ -11,6 +11,7 @@ import { LogOut, Settings, User } from 'lucide-react'
 import { useLogout } from '@/hooks/auth/useAuth'
 import { Link } from 'react-router-dom'
 import routes from '@/routes/routes'
+import { IUser } from '@/types/user'
 
 interface UserButtonProps {
     username?: string
@@ -18,7 +19,7 @@ interface UserButtonProps {
     notifications?: number
 }
 const UserButton: React.FC<UserButtonProps> = () => {
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<IUser | null>(null)
     const { mutateAsync } = useLogout()
     useEffect(() => {
         const storedUser = localStorage.getItem('user_data')

@@ -41,6 +41,7 @@
                             </th>
                             <th>ID</th>
                             <th>Tiêu đề</th>
+                            <th>Biểu tượng</th>
                             <th>Mô tả</th>
                             <th>Danh mục cha</th>
                             <th>Trạng thái</th>
@@ -65,6 +66,7 @@
                                 </th>
                                 <td>{{$i}}</td>
                                 <td>{{$cat->name}}</td>
+                                <td>{!!$cat->icon_svg!!}</td>
                                 <td>{{strip_tags($cat->description)}}</td>
                                 <td>
                                     <span class="text-info">

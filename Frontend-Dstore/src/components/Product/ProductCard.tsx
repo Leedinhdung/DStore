@@ -13,7 +13,6 @@ interface ProductCardProps {
 const ProductCard = ({
   product,
   showDiscount = true,
-  discountPercent = 10
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false)
 

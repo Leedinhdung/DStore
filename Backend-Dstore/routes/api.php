@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\OtpController;
+use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -16,3 +18,10 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('logout',[AuthController::class,'logout']);
     });
 });
+
+Route::prefix('categories')->group(function(){
+Route::get('danh-muc',[CategoryController::class,'getCategories']);
+});
+
+Route::get('banners',[BannerController::class,'getBanners']);
+

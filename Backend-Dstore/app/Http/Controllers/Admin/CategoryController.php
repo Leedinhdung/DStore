@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Category\StoreCategoryRequest;
 use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -34,6 +35,9 @@ class CategoryController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->validated();
+           if (!empty($data['name'])) {
+                $data['slug'] = Str::slug($data['name']);
+            }
             $newCategory = Category::create($data);
             if (!$newCategory) {
                 throw new \Mockery\Exception('Thêm mới thất bại');
@@ -74,6 +78,9 @@ class CategoryController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->all();
+             if(!empty($data['name'])){
+                $data['slug']=Str::slug($data['name']);
+            }
             $category->update($data);
             DB::commit();
             return redirect()->route('admin.category.index')->with(['success' => 'Cập nhật thành công']);
