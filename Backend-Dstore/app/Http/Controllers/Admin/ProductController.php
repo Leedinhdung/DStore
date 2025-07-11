@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -92,7 +93,7 @@ class ProductController extends Controller
             return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');
         } catch (Exception $e) {
             DB::rollBack();
-            \Log::error('Product store failed: ' . $e->getMessage(), [
+            Log::error('Product store failed: ' . $e->getMessage(), [
                 'request_data' => $request->except(['image', 'variants']),
                 'user_id' => auth()->id()
             ]);
@@ -179,7 +180,7 @@ class ProductController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Product update failed: ' . $e->getMessage(), [
+            Log::error('Product update failed: ' . $e->getMessage(), [
                 'request_data' => $request->except(['image', 'variants']),
                 'user_id' => auth()->id()
             ]);

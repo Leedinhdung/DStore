@@ -24,7 +24,8 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:255|unique:categories,name',
-            'description' => 'nullable|string|min:3|max:255',
+            'icon_svg'=>'nullable|string|min:3|max:1000',
+            'description' => 'nullable|string|min:3|max:1000',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }
@@ -39,6 +40,7 @@ class StoreCategoryRequest extends FormRequest
 
             'description.string' => 'Mô tả phải là chuỗi.',
             'description.max' => 'Mô tả không được vượt quá 1000 ký tự.',
+            'icon_svg.max' => 'Icon không được vượt quá 1000 ký tự.',
         ];
     }
 }
