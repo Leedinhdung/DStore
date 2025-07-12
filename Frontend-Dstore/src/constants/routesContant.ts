@@ -14,4 +14,5 @@ export const publicRoutes = [
 	{ path: routes.register, layout: AuthLayout, element: Register },
 	{ path: routes.detailProduct, layout: Layout, element: DetailProduct },
 	{ path: routes.cart, layout: Layout, element: Cart },
+	{ path: routes.category, layout: Layout, element: Cart },
 ];

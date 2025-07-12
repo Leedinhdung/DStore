@@ -4,7 +4,7 @@ import Review from '@/components/Review/Review';
 import ProductCard from '@/components/Product/ProductCard';
 import ProductSection from '@/components/sections/ProductSection';
 import { useProducts } from '@/hooks/useProducts';
-import { HEADPHONE_TABS, SPEAKER_TABS, SWIPER_BREAKPOINTS, SWIPER_BREAKPOINTS_SMALL, IMAGES } from '@/constants/data';
+import { HEADPHONE_TABS, SPEAKER_TABS, SWIPER_BREAKPOINTS_SMALL, IMAGES } from '@/constants/data';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -17,50 +17,65 @@ const Home = () => {
 			<Banner />
 
 			{/* Promotional Banner */}
-			<div className="max-w-screen-xl mx-auto px-4 py-6">
+			<div className="max-w-screen-xl mx-auto px-4 py-3 md:py-6">
 				<img
 					src={IMAGES.PROMOTIONAL_BANNER}
 					alt="Promotional Banner"
-					className="w-full rounded-xl shadow"
+					className="w-full rounded-lg md:rounded-xl shadow"
 				/>
 			</div>
 
 			{/* Flash Sale Section */}
-			<div className="max-w-screen-xl mx-auto px-4 py-6 relative">
-				<img
-					src={IMAGES.FLASH_SALE_BG}
-					alt="Flash Sale Background"
-					className="w-full rounded-xl shadow"
-				/>
+			<div className="max-w-screen-xl mx-auto px-4 py-3 md:py-6 relative">
+				{/* Background container with fixed height on desktop */}
+				<div className="relative w-full h-auto sm:h-[500px] rounded-xl overflow-hidden">
+					{/* Background image */}
+					<img
+						src={IMAGES.FLASH_SALE_BG}
+						alt="Flash Sale Background"
+						className="absolute inset-0 w-full h-full object-cover z-0"
+					/>
 
-				<div className="absolute top-6 sm:top-10 left-4 sm:left-10 right-4 sm:right-10">
-					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
-						<h2 className="italic text-yellow-300 text-3xl sm:text-5xl font-extrabold drop-shadow-lg">
-							FLASH SALE TUẦN NÀY
-						</h2>
-						<button className="bg-slate-50 font-medium px-4 py-2 rounded-xl shadow hover:bg-[#1781E0] hover:text-white">
-							Xem tất cả
-						</button>
+					<div className="relative z-10 px-1 sm:px-10 py-4 sm:py-3 h-full flex flex-col justify-between">
+						{/* Title */}
+						<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
+							<h2 className="italic text-yellow-300 text-2xl mx-auto md:mx-0 sm:text-5xl font-extrabold drop-shadow-lg text-center sm:text-left">
+								FLASH SALE TUẦN NÀY
+							</h2>
+							<button className="bg-slate-50 font-medium px-4 py-2 rounded-xl shadow hover:bg-[#1781E0] hover:text-white w-full sm:w-auto max-w-xs hidden md:block">
+								Xem tất cả
+							</button>
+						</div>
+
+						{/* Swiper section */}
+						<div className="mt-6">
+							<Swiper
+								spaceBetween={5}
+								breakpoints={SWIPER_BREAKPOINTS_SMALL}
+								loop
+								autoplay={{ delay: 3000 }}
+								modules={[Autoplay]}
+								className="h-full"
+							>
+								{[...Array(6)].map((_, i) => (
+									<SwiperSlide key={i}>
+										<ProductCard />
+									</SwiperSlide>
+								))}
+							</Swiper>
+						</div>
+
+						{/* Button - center on mobile, right on desktop */}
+						<div className="mt-6 flex justify-center sm:justify-end">
+							<button className="bg-slate-50 font-medium px-4 py-2 rounded-xl shadow hover:bg-[#1781E0] hover:text-white w-full sm:w-auto max-w-xs">
+								Xem tất cả
+							</button>
+						</div>
 					</div>
 
-					<div className="mt-6">
-						<Swiper
-							spaceBetween={16}
-							breakpoints={SWIPER_BREAKPOINTS}
-							loop
-							autoplay={{ delay: 3000 }}
-							modules={[Autoplay]}
-							className="h-full"
-						>
-							{[...Array(6)].map((_, i) => (
-								<SwiperSlide key={i}>
-									<ProductCard />
-								</SwiperSlide>
-							))}
-						</Swiper>
-					</div>
 				</div>
 			</div>
+
 
 			{/* Headphones Section */}
 			<ProductSection

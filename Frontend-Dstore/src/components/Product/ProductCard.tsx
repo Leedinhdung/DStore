@@ -44,20 +44,20 @@ const ProductCard = ({
             <img
               src={productData.image}
               alt={productData.name}
-              className=" h-48 object-contain transition-transform duration-300 hover:scale-110"
+              className="h-32 md:h-48 object-cover transition-transform duration-300 hover:scale-110"
             />
           </div>
 
           {/* Product Title */}
-          <h3 className="text-gray-800 font-medium text-base mb-3 line-clamp-2 hover:text-blue-400">
+          <h3 className="text-gray-800 font-medium text-xs sm:text-base mb-3 line-clamp-2 hover:text-blue-400">
             {productData.name}
           </h3>
         </Link>
 
         {/* Price Section */}
         <div className="mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-red-600 font-bold text-lg">
+          <div className="grid md:flex items-center gap-1">
+            <span className="text-red-600 font-bold text-sm">
               {priceFormat(productData.price)}
             </span>
             <span className="text-gray-400 line-through text-sm">
@@ -89,7 +89,7 @@ const ProductCard = ({
             >
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
-            <span className="text-sm">Yêu thích</span>
+           
           </button>
         </div>
       </div>
