@@ -4,7 +4,7 @@ const Review = () => {
             <div>
                 <img
                     src="https://songlongmedia.com/media/lib/02-04-2024/dinh-manh-ninh-songlongmedia-tang-ao-beats-31-12-2012.jpg"
-                    className="rounded-full h-48 w-48 object-cover"
+                    className="rounded-full h-24 w-24 md:h-48 md:w-48 object-cover"
                     alt=""
                 />
             </div>
@@ -20,7 +20,7 @@ const Review = () => {
                         </svg>
                     ))}
                 </div>
-                <p className="text-sm leading-relaxed">
+                <p className="text-[12px] leading-relaxed">
                     NINH nhớ hồi năm 2012 sắm tai BEATS về trải nghiệm và dùng nó làm món đồ Outfit quay chụp ảnh luôn,
                     ngày ấy mua tai nghe không đơn giản như bây giờ. Mua hàng xong còn được tặng mấy chiếc áo Beats nữa.
                 </p>

@@ -111,7 +111,7 @@ export const PRODUCTS_DATA: Record<string, Product[]> = {
 };
 
 export const SWIPER_BREAKPOINTS = {
-	320: { slidesPerView: 1 },
+	320: { slidesPerView: 2 },
 	640: { slidesPerView: 2 },
 	768: { slidesPerView: 3 },
 	1024: { slidesPerView: 4 },
@@ -119,11 +119,12 @@ export const SWIPER_BREAKPOINTS = {
 } as const;
 
 export const SWIPER_BREAKPOINTS_SMALL = {
-	320: { slidesPerView: 1 },
-	640: { slidesPerView: 2 },
-	768: { slidesPerView: 2 },
-	1024: { slidesPerView: 3 },
-	1280: { slidesPerView: 4 },
+	0: { slidesPerView: 2 }, 
+	480: { slidesPerView: 2 },
+	640: { slidesPerView: 3 },
+	768: { slidesPerView: 3 },
+	1024: { slidesPerView: 4 },
+	1280: { slidesPerView: 5 },
 } as const;
 
 export const THEME_COLORS = {

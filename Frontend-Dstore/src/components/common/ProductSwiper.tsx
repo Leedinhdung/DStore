@@ -1,6 +1,6 @@
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { SWIPER_BREAKPOINTS, SWIPER_BREAKPOINTS_SMALL } from '@/constants/data';
+import { SWIPER_BREAKPOINTS} from '@/constants/data';
 import 'swiper/css';
 
 interface ProductSwiperProps {
