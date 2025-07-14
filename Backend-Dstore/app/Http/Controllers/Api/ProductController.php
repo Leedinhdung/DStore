@@ -64,7 +64,35 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Đã xảy ra lỗi khi lưu bài viết',
+                'message' => 'Đã xảy ra lỗi',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getProductsBySlug(Request $request, string $slug)
+    {
+        try {
+            $product = Product::with('variants', 'variants.images')->where('slug', $slug)->first();
+            if (!$product) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Không có sản phẩm nào',
+                    'data' => []
+                ], 204);
+            }
+            $similarProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->limit(10)->get();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Lấy danh sách sản phẩm thành công',
+                'data' => [
+                    'product' => $product,
+                    'similarProducts' => $similarProducts,
+                ]
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Đã xảy ra lỗi',
                 'error' => $e->getMessage()
             ], 500);
         }
