@@ -1,6 +1,6 @@
 export interface TabItem {
-	label: string;
-	value: string;
+	name: string;
+	slug: string;
 }
 
 export interface Product {
@@ -17,35 +17,6 @@ export const PRODUCT_CATEGORIES = {
 	SPEAKERS: "speakers",
 } as const;
 
-export const HEADPHONE_TABS: TabItem[] = [
-	{
-		label: "Tai nghe true wireless",
-		value: "trueWireless",
-	},
-	{
-		label: "Tai nghe bluetooth",
-		value: "bluetooth",
-	},
-	{
-		label: "Tai nghe có dây",
-		value: "wired",
-	},
-];
-
-export const SPEAKER_TABS: TabItem[] = [
-	{
-		label: "Loa vi tính",
-		value: "speakerPC",
-	},
-	{
-		label: "Loa kiểm âm",
-		value: "monitoring",
-	},
-	{
-		label: "Loa bluetooth",
-		value: "bluetooth",
-	},
-];
 
 export const PRODUCTS_DATA: Record<string, Product[]> = {
 	trueWireless: [
@@ -143,13 +114,3 @@ export const IMAGES = {
 	FLASH_SALE_BG:
 		"https://songlongmedia.com/static/assets/2023/images/home-deal-bg.png",
 } as const;
-
-// Default product data for fallback
-export const DEFAULT_PRODUCT: Product = {
-	id: 1,
-	color: "Yellow",
-	name: "Tai nghe Skullcandy CRUSHER EVO ALL LOVE...",
-	price: 4990000,
-	priceOrigin: 5550000,
-	image: IMAGES.PRODUCT_DEFAULT,
-};

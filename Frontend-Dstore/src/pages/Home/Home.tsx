@@ -1,16 +1,27 @@
 import Banner from '@/components/Banner/Banner';
 import Post from '@/components/Post/Post';
 import Review from '@/components/Review/Review';
-import ProductCard from '@/components/Product/ProductCard';
 import ProductSection from '@/components/sections/ProductSection';
 import { useProducts } from '@/hooks/useProducts';
-import { HEADPHONE_TABS, SPEAKER_TABS, SWIPER_BREAKPOINTS_SMALL, IMAGES } from '@/constants/data';
+import { SWIPER_BREAKPOINTS_SMALL, IMAGES } from '@/constants/data';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useGetCategories } from '@/hooks/category/useGetCategories';
+import { useGetProducts } from '@/hooks/product/useGetProducts';
+import { ICategory } from '@/types/category';
+import { IProduct } from '@/types/product';
 
 const Home = () => {
-	const { activeTab, products, onTabActive } = useProducts();
+	const { activeTab, onTabActive } = useProducts();
+	const { data: product } = useGetProducts()
+	const { data: categories } = useGetCategories()
+	console.log(product)
+	const getFilteredProducts = (category: ICategory): IProduct[] => {
+		const list = product?.[category.slug] || [];
+		const isFiltering = activeTab && category.children.some(c => c.slug === activeTab);
+		return isFiltering ? list.filter((p: IProduct) => p.category?.slug === activeTab) : list;
+	};
 
 	return (
 		<div>
@@ -57,16 +68,21 @@ const Home = () => {
 								modules={[Autoplay]}
 								className="h-full"
 							>
-								{[...Array(6)].map((_, i) => (
-									<SwiperSlide key={i}>
-										<ProductCard />
-									</SwiperSlide>
-								))}
+								{/* {product?.data &&
+									Object.values(product.data)
+										.flat()
+										.slice(0, 10) 
+										.map((item, i) => (
+											<SwiperSlide key={i}>
+												<ProductCard product={item} />
+											</SwiperSlide>
+										))} */}
+
 							</Swiper>
 						</div>
 
 						{/* Button - center on mobile, right on desktop */}
-						<div className="mt-6 flex justify-center sm:justify-end">
+						<div className="sm:hidden mt-6 flex justify-center sm:justify-end">
 							<button className="bg-slate-50 font-medium px-4 py-2 rounded-xl shadow hover:bg-[#1781E0] hover:text-white w-full sm:w-auto max-w-xs">
 								Xem tất cả
 							</button>
@@ -77,23 +93,16 @@ const Home = () => {
 			</div>
 
 
-			{/* Headphones Section */}
-			<ProductSection
-				title="Tai nghe"
-				tabs={HEADPHONE_TABS}
-				products={products}
-				activeTab={activeTab}
-				onTabChange={onTabActive}
-			/>
-
-			{/* Speakers Section */}
-			<ProductSection
-				title="Loa"
-				tabs={SPEAKER_TABS}
-				products={products}
-				activeTab={activeTab}
-				onTabChange={onTabActive}
-			/>
+			{categories?.map((category) => (
+				<ProductSection
+					key={category.id}
+					title={category.name}
+					tabs={category.children.map(child => ({ name: child.name, slug: child.slug }))}
+					products={getFilteredProducts(category)}
+					activeTab={activeTab}
+					onTabChange={onTabActive}
+				/>
+			))}
 
 			{/* Technology News Section */}
 			<div className="max-w-screen-xl mx-auto px-4 py-6">

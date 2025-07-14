@@ -27,17 +27,15 @@ const Header = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md">
+    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md fixed top-0 w-full py-2 z-30 ">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4 px-4 py-3">
-        {/* Logo & Hamburger */}
         <div className="flex justify-between items-center md:justify-start">
-          <Link to="/" className="text-xl font-bold flex items-center">
-            <span className="bg-white text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">
+          <Link to="/" className="text-2xl font-bold flex items-center">
+            <span className="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-2">
               D
             </span>
             DStore
           </Link>
-          {/* Mobile menu button */}
           <div className='flex gap-3'>
             <Link
               to={routes.cart}

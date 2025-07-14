@@ -2,9 +2,10 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SWIPER_BREAKPOINTS} from '@/constants/data';
 import 'swiper/css';
+import { IProduct } from '@/types/product';
 
 interface ProductSwiperProps {
-    products: any[];
+    products: IProduct[];
     Component: React.ComponentType<any>;
     breakpoints?: typeof SWIPER_BREAKPOINTS;
     autoplayDelay?: number;
@@ -29,7 +30,7 @@ const ProductSwiper = ({
         >
             {products.map((item, index) => (
                 <SwiperSlide key={`swiper-${index}`}>
-                    <Component {...item} />
+                    <Component product={item} />
                 </SwiperSlide>
             ))}
         </Swiper>

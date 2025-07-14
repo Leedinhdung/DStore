@@ -38,15 +38,15 @@ const Banner = () => {
                                     menuRefs.current[index] = el as HTMLLIElement;
                                 }}
                                 onMouseEnter={() => handleMouseEnter(index)}
-                                className="relative"
+                                className="relative z-10"
                             >
                                 <Link
                                     to={routes.category.replace(":slug", item.slug)}
-                                    className="flex justify-between items-center text-sm font-medium cursor-pointer px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition-all duration-200"
+                                    className="flex justify-between items-center text-sm font-medium cursor-pointer px-3 py-2 rounded hover:bg-blue-400 hover:text-white transition-all duration-200"
                                 >
                                     <div className="flex items-center gap-2">
                                         <span
-                                            className="text-blue-500 group-hover:text-white"
+                                            className=" group-hover:text-white"
                                             dangerouslySetInnerHTML={{ __html: item.icon_svg }}
                                         />
                                         <span>{item.name}</span>

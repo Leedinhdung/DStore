@@ -1,10 +1,9 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme, Link } from '@mui/material';
-import { THEME_COLORS } from '@/constants/data';
+import { TabItem, THEME_COLORS } from '@/constants/data';
 import TabButton from '@/components/common/TabButton';
-
 interface SectionHeaderProps {
     title: string;
-    tabs?: Array<{ label: string; value: string }>;
+    tabs?: TabItem[];
     activeTab: string;
     onTabChange: (value: string) => void;
     showViewAll?: boolean;
@@ -14,7 +13,6 @@ interface SectionHeaderProps {
 const SectionHeader = ({
     title,
     tabs,
-    activeTab,
     onTabChange,
     showViewAll = false,
     onViewAll
@@ -56,18 +54,16 @@ const SectionHeader = ({
                     {tabs?.map((tab, index) => (
                         <TabButton
                             key={index}
-                            label={tab.label}
-                            value={tab.value}
-                            activeTab={activeTab}
+                            title={tab.name}
+                            slug={tab.slug}
                             onClick={onTabChange}
                         />
                     ))}
 
                     {showViewAll && (
                         <TabButton
-                            label="Xem tất cả"
-                            value=""
-                            activeTab={activeTab}
+                            title="Xem tất cả"
+                            slug=""
                             onClick={onViewAll || onTabChange}
                         />
                     )}
