@@ -26,6 +26,7 @@ Route::get('danh-muc',[CategoryController::class,'getCategories']);
 Route::prefix('products')->group(function(){
 Route::get('san-pham',[ProductController::class,'getProducts']);
 Route::get('san-pham/{slug}',[ProductController::class,'getProductsByCategory']);
+Route::get('chi-tiet-san-pham/{slug}',[ProductController::class,'getProductsBySlug']);
 });
 
 Route::get('banners',[BannerController::class,'getBanners']);
