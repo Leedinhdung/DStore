@@ -73,7 +73,7 @@
                         <div class="row">
                             <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">Giá gốc</label>
-                                <input type="number" step="10000" class="form-control" name="original_price" value="{{old('original_price')}}"
+                                <input type="number" class="form-control" name="original_price" value="{{old('original_price')}}"
                                        placeholder="Nhập giá gốc">
                                 @error('original_price')
                                 <div class="text-danger my-2"> {{$message}} </div>

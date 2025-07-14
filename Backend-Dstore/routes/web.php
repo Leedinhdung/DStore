@@ -62,3 +62,6 @@ Route::prefix('quan-tri')->as('admin.')->group(function () {
         });
     });
 });
+Route::get('/', function () {
+    return redirect()->route('admin.login');
+});
