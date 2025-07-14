@@ -1,6 +1,9 @@
 import ProductCard from "@/components/Product/ProductCard";
 import { addToCart } from "@/features/cart/cartSlice";
 import { percentFormat, priceFormat } from "@/helpers/formatHelper";
+import { useGetSlugParams } from "@/hooks/common/useCustomParams";
+import { useGetProductsBySlug } from "@/hooks/product/useGetProducts";
+import { getImageUrl } from "@/lib/common";
 import { Breadcrumbs, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
@@ -10,93 +13,17 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const DetailProduct = () => {
-    const [selectedColor, setSelectedColor] = useState("black")
-    const [mainImage, setMainImage] = useState(
-        "https://songlongmedia.com/media/product/4172_tai_nghe_fiio_snowsky_anytime_black_songlongmedia__7_.jpg"
+    const slug = useGetSlugParams('slug')
+    const [selectedColor, setSelectedColor] = useState<number | undefined>(undefined);
+    const { data: product } = useGetProductsBySlug(slug!)
+    const detailProduct = product?.product
+    const [mainImage, setMainImage] = useState<string | undefined>(
+        detailProduct?.image
     );
     const dispatch = useDispatch()
-    const colors = [
-        {
-            id: "black",
-            name: "Black",
-            price: "899.000đ",
-            selected: true,
-        },
-        {
-            id: "pink",
-            name: "Pink",
-            price: "899.000đ",
-            selected: false,
-        },
-        {
-            id: "titanium",
-            name: "Titanium Gold",
-            price: "899.000đ",
-            selected: false,
-        },
-    ]
-    const productData =
-    {
-        id: "soundpeats-cybergear",
-        name: "Tai nghe Gaming True Wireless SoundPEATS Cyber Gear",
-        price: 550000,
-        priceOrigin: 750000,
-        image: "https://songlongmedia.com/media/product/250_3610_tai_nghe_gaming_true_wireless_sony_inzone_buds_songlongmedia__5_.jpg",
-    }
-        ;
-    const products = [
-        {
-            id: "soundpeats-cybergear",
-            name: "Tai nghe Gaming True Wireless SoundPEATS Cyber Gear",
-            price: 550000,
-            priceOrigin: 750000,
-            thumbnail: "https://tse1.mm.bing.net/th?id=OIP.BLI6wsVYqzupNWq1C5oujQHaHa&pid=Api",
-        },
-        {
-            id: "7hz-sevenhertz-71",
-            name: "DAC/Amp di động 7Hz Sevenhertz 71",
-            price: 2000000,
-            priceOrigin: null,
-            thumbnail: "https://tse4.mm.bing.net/th?id=OIP.O_wqNYYPcVlRUsX5z-WDAwHaL6&pid=Api",
-        },
-        {
-            id: "fiio-btr15",
-            name: "FiiO BTR15 Bluetooth Receiver - USB DAC",
-            price: 2490000,
-            priceOrigin: null,
-            thumbnail: "https://tse1.mm.bing.net/th?id=OIP.85uJvyJnJ_DM0w8zzYNbrgHaHa&pid=Api",
-        },
-        {
-            id: "ruizu-d19",
-            name: "Máy nghe nhạc Ruizu D19 (16GB, Bluetooth 5.0)",
-            price: 900000,
-            priceOrigin: null,
-            thumbnail: "https://tse1.mm.bing.net/th?id=OIP.uXFFfZFqlDVwwf5dc0v30QHaHa&pid=Api",
-        },
-        {
-            id: "earpad-corsair",
-            name: "Earpad cho tai nghe Corsair HS50/HS60/HS70",
-            price: 299000,
-            priceOrigin: 349000,
-            thumbnail: "https://songlongmedia.com/uploads/images/2022/08/05/earpad-corsair-hs70-pro.jpg",
-        },
-        {
-            id: "earpad-corsair",
-            name: "Earpad cho tai nghe Corsair HS50/HS60/HS70",
-            price: 299000,
-            priceOrigin: 349000,
-            thumbnail: "https://songlongmedia.com/uploads/images/2022/08/05/earpad-corsair-hs70-pro.jpg",
-        },
-    ];
+    const [showFullSpec, setShowFullSpec] = useState(false);
+    const [showFullDescription, setShowFullDescription] = useState(false);
 
-
-    const thumbnails = [
-        "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
-        "https://songlongmedia.com/media/product/2676_dac_amp_ifi_idsd_diablo_songlongmedia__1_.jpg",
-        "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
-        "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
-        "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
-    ]
     return (
         <div className="max-w-screen-xl mx-auto px-4">
             <Stack spacing={2}>
@@ -116,53 +43,66 @@ const DetailProduct = () => {
                 {/* Product Images Section */}
                 <div className="space-y-4">
                     {/* Main Product Image */}
-                    <div className="border-2 md:border-none rounded-lg overflow-hidden">
+                    <div className="border-2 md:border-none rounded-lg overflow-hidden flex justify-center">
                         <img
-                            src={mainImage}
-                            alt="Main Product"
-                            className="h-auto max-h-[500px] sm:h-[510px]"
+                            src={getImageUrl(mainImage || detailProduct?.image || '')}
+                            alt={detailProduct?.title}
+                            className="h-auto max-h-[500px] sm:h-[510px] object-cover rounded-lg mx-auto"
                         />
                     </div>
-
-                    {/* Thumbnail Images */}
-                    <div className="flex gap-2 overflow-x-auto pb-2">
-                        {thumbnails.map((thumb, index) => (
-                            <div
-                                key={index}
-                                onClick={() => setMainImage(thumb)}
-                                className="flex-shrink-0 w-28 h-28 bg-gray-100 rounded-lg overflow-hidden border hover:border-gray-300 cursor-pointer"
-                            >
-                                <img
-                                    src={thumb || "/placeholder.svg"}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <Swiper
+                        spaceBetween={10}
+                        breakpoints={{
+                            320: { slidesPerView: 4 },
+                            640: { slidesPerView: 5 },
+                            768: { slidesPerView: 5 },
+                            1024: { slidesPerView: 5 },
+                            1280: { slidesPerView: 5 },
+                        }}
+                        loop
+                        className="h-full mt-5"
+                    >
+                        {detailProduct?.variants.map((variant, variantIndex) =>
+                            variant.images.map((img, imgIndex) => (
+                                <SwiperSlide
+                                    key={`${variantIndex}-${imgIndex}`}
+                                    style={{ width: '112px' }}
+                                >
+                                    <div
+                                        onClick={() => setMainImage(img.image_path)}
+                                        className="w-28 h-28 bg-gray-100 rounded-lg overflow-hidden border-2 hover:border-gray-400 cursor-pointer"
+                                    >
+                                        <img
+                                            src={getImageUrl(img.image_path) || "/placeholder.svg"}
+                                            alt={`Thumbnail ${variantIndex + 1}-${imgIndex + 1}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                </SwiperSlide>
+                            ))
+                        )}
+                    </Swiper>
                 </div>
-
 
                 {/* Product Details Section */}
                 <div className="space-y-6">
                     {/* Product Title */}
-                    <h1 className="text-xl lg:text-2xl font-medium text-gray-900">
-                        {productData.name}
+                    <h1 className="text-base lg:text-xl font-bold text-gray-900">
+                        {detailProduct?.title}
                     </h1>
-
                     {/* Product Info */}
                     <div className="flex flex-wrap gap-4 text-sm">
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600">Thương hiệu:</span>
-                            <span className="text-blue-600 font-medium">FiiO</span>
+                            <span className="text-blue-600 font-medium">{detailProduct?.brand}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600">SKU:</span>
-                            <span className="text-gray-900">4172</span>
+                            <span className="text-gray-900">{detailProduct?.sku}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600">Tình trạng:</span>
-                            <span className="text-green-600">Còn hàng</span>
+                            {detailProduct?.condition == 'instock' ? <span className="text-green-600">Còn hàng</span> : <span className="text-green-600">Hết hàng</span>}
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600">Bảo hành:</span>
@@ -197,41 +137,51 @@ const DetailProduct = () => {
 
                     {/* Price */}
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-5">
-                            <p className="text-4xl font-bold text-red-600">{priceFormat(productData.price)}</p>
-                            <del className="text-gray-500 text-base font-medium">{priceFormat(productData.priceOrigin)}</del>
-                        </div>
+                        {detailProduct?.sale_price != null ? (
+                            <>
+                                <p className="text-4xl font-bold text-red-600">
+                                    {priceFormat(detailProduct.sale_price)}
+                                </p>
+                                <del className="text-gray-500 text-base font-medium">
+                                    {priceFormat(detailProduct.original_price || 0)}
+                                </del>
+                            </>
+                        ) : (
+                            <p className="text-[32px] font-bold text-red-600">
+                                {priceFormat(detailProduct?.original_price || 0)}
+                            </p>
+                        )}
                         <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                            {percentFormat((productData.priceOrigin - productData.price) / productData.priceOrigin)}
+                            {detailProduct?.sale_price != null && detailProduct?.original_price
+                                ? percentFormat(
+                                    (detailProduct.original_price - detailProduct.sale_price) /
+                                    detailProduct.original_price
+                                )
+                                : null}
+
                         </div>
                     </div>
 
-                    {/* Color Selection */}
+                    {/* Lựa chọn phân loại */}
                     <div className="space-y-3">
                         <h3 className="font-semibold text-gray-900">Lựa chọn phân loại</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            {colors.map((color) => (
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            {detailProduct?.variants.map((item) => (
                                 <div
-                                    key={color.id}
-                                    className={`border-2 rounded-lg p-3 cursor-pointer transition-colors ${selectedColor === color.id ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                                    key={item.id}
+                                    className={`border-2 rounded-lg p-3 cursor-pointer transition-colors ${selectedColor === item.id
+                                        ? 'border-blue-500 bg-blue-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
-                                    onClick={() => setSelectedColor(color.id)}
+                                    onClick={() => setSelectedColor(item.id)}
                                 >
                                     <div className="flex items-center gap-3">
-                                        {selectedColor === color.id && (
-                                            <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </div>
-                                        )}
                                         <div>
-                                            <div className="font-medium text-gray-900">{color.name}</div>
-                                            <div className="text-blue-600 font-semibold">{color.price}</div>
+                                            <div className="font-medium text-gray-900">{item.color}</div>
+                                            <div className="text-blue-600 font-semibold">
+                                                {priceFormat(item.price || 0)}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -239,17 +189,23 @@ const DetailProduct = () => {
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-6 rounded-lg transition-colors">
-                            <div className="text-lg">MUA NGAY</div>
-                            <div className="text-sm opacity-90">Giao nhanh hoặc nhận tại cửa hàng</div>
+                    {/* Nút hành động */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                        <button className="bg-red-500 hover:bg-red-600 text-white py-4 px-6 rounded-lg transition-colors">
+                            <div className="text-lg font-bold">MUA NGAY</div>
+                            <div className="text-sm font-medium opacity-90">
+                                Giao nhanh hoặc nhận tại cửa hàng
+                            </div>
                         </button>
-                        <button onClick={() => dispatch(addToCart(productData))} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg transition-colors">
-                            <div className="text-lg">THÊM VÀO GIỎ HÀNG</div>
-                            <div className="text-sm opacity-90">Tiếp tục mua sắm</div>
+                        <button
+                            onClick={() => dispatch(addToCart(detailProduct))}
+                            className="bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-lg transition-colors"
+                        >
+                            <div className="text-lg font-bold">THÊM VÀO GIỎ HÀNG</div>
+                            <div className="text-sm opacity-90 font-medium">Tiếp tục mua sắm</div>
                         </button>
                     </div>
+
                 </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-1 pt-8 border-t border-gray-200">
@@ -258,30 +214,8 @@ const DetailProduct = () => {
                     <h3 className="text-xl font-bold text-gray-900">Thông tin sản phẩm</h3>
                     <div className="space-y-3 text-sm">
                         <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Tình trạng:</span>
-                            <span className="ml-2 text-gray-900">Nguyên hộp mới 100%, đầy đủ phụ kiện từ NSX</span>
-                        </div>
-                        <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Xuất xứ:</span>
-                            <span className="ml-2 text-gray-900">Chính hãng phân phối</span>
-                        </div>
-                        <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Thương hiệu quốc gia:</span>
-                            <span className="ml-2 text-gray-900">Trung Quốc</span>
-                        </div>
-                        <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Sản xuất tại:</span>
-                            <span className="ml-2 text-gray-900">Trung Quốc</span>
-                        </div>
-                        <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Bộ sản phẩm gồm:</span>
-                            <span className="ml-2 text-gray-900">01 Tai nghe FiiO SNOWSKY Anytime, 01 Dây sạc, 01 sách HDSD</span>
-                        </div>
-                        <div className="flex">
-                            <span className="text-gray-600 min-w-0 flex-shrink-0">• Bảo hành:</span>
-                            <span className="ml-2 text-gray-900">
-                                12 tháng chính hãng, 1 đổi 1 trong 07 ngày nếu có lỗi phần cứng từ NSX.
-                            </span>
+                            <div className="text-gray-600 text-sm leading-loose"
+                                dangerouslySetInnerHTML={{ __html: detailProduct?.short_description || "" }} />
                         </div>
                     </div>
                     <button className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
@@ -309,7 +243,6 @@ const DetailProduct = () => {
                                 Miễn phí tư vấn tận tình, chọn sản phẩm phù hợp với đúng nhu cầu
                             </p>
                         </div>
-
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -322,7 +255,6 @@ const DetailProduct = () => {
                             </div>
                             <p className="text-gray-700 text-sm">Cam kết hàng chính hãng công ty phân phối</p>
                         </div>
-
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -335,7 +267,6 @@ const DetailProduct = () => {
                             </div>
                             <p className="text-gray-700 text-sm">Dịch vụ kĩ thuật sau bán hàng, sửa chữa, cung cấp phụ kiện.</p>
                         </div>
-
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -368,216 +299,86 @@ const DetailProduct = () => {
                         modules={[Autoplay]}
                         className="h-full mt-5"
                     >
-                        {products.map((item, index) => (
+                        {product?.similarProducts?.map((item, index) => (
                             <SwiperSlide key={index}>
-                                <ProductCard />
+                                <ProductCard product={item} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
 
-
-
                 </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 pt-8 border-t border-gray-200">
-                {/* Outstanding Features */}
-                <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8  sm:mt-12 sm:pt-8 ">
+                {/* Outstanding Features - chiếm 8 cột */}
+                <div className="lg:col-span-8 space-y-6">
                     <div className="text-center">
                         <h3 className="text-xl font-bold text-red-600 bg-gray-100 py-2 px-4 rounded-lg">Đặc Điểm Nổi Bật</h3>
                     </div>
-
-                    <div className="space-y-4 text-sm leading-relaxed">
-                        <div className="flex items-start gap-2">
-                            <div className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <p className="text-gray-700">
-                                Tai nghe <span className="font-semibold">FiiO Snowsky Anytime</span> là dòng sản phẩm tai nghe onear
-                                bluetooth có tích hợp công nghệ ANC cao cấp, đồng thời đây là sản phẩm đánh dấu sự kết hợp hoàn hảo
-                                giữa phong cách thiết kế Retro Y2K cá tính với công nghệ hiện đại, hứa hẹn sẽ mang tới cho người
-                                dùng một dòng sản phẩm vừa thời trang xen lẫn công nghệ âm thanh cao cấp
-                            </p>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <div className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <p className="text-gray-700">
-                                Thiết kế cực kì ấn tượng ngay từ ánh nhìn đầu tiên, lấy cảm hứng từ phong cách{" "}
-                                <span className="font-semibold">retro Y2K</span> - một xu hướng đang trở lại mạnh mẽ trong thời điểm
-                                hiện tại. Với vẻ ngoài cá tính, năng động cùng với nhiều màu sắc dễ dàng lựa chọn theo từng sở thích
-                                cá nhân
-                            </p>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <div className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <p className="text-gray-700">
-                                Tai nghe <span className="font-semibold">FiiO Snowsky Anytime</span> được hoàn thiện với các vật
-                                liệu, chất liệu cao cấp cho nên sẽ sở hữu trọng lượng khá nhẹ chỉ khoảng{" "}
-                                <span className="font-semibold">155g</span>. Đem lại mềm mại êm ái, khả năng thoát khí cực nhanh phù
-                                hợp đảm bảo sự dụng trong thời gian dài trong ngày.
-                            </p>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <div className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <p className="text-gray-700">
-                                Sử dụng driver <span className="font-semibold">Dynamic lên tới 40mm</span> chất lượng cao, đáp ứng
-                                tần số rộng cùng với âm trầm mạnh mẽ, dễ dàng nghe nhiều dòng nhạc khác nhau
-                            </p>
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                            <div className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <p className="text-gray-700">
-                                Tai nghe <span className="font-semibold">FiiO Snowsky Anytime</span> sử dụng công nghệ kết nối{" "}
-                                <span className="font-semibold">bluetooth 5.4 Codec SBC, AAC</span> mang tới khả năng
-                            </p>
-                        </div>
+                    <div
+                        className={`space-y-4 text-sm leading-relaxed px-5 transition-all duration-300 ${showFullDescription ? '' : 'max-h-72 overflow-hidden'
+                            }`}
+                    >
+                        <p
+                            className="text-gray-700"
+                            dangerouslySetInnerHTML={{ __html: detailProduct?.description || '' }}
+                        />
                     </div>
 
                     <div className="text-center">
-                        <button className="bg-white border border-gray-300 hover:bg-gray-50 px-6 py-2 rounded-lg text-gray-700 font-medium flex items-center gap-2 mx-auto">
-                            Xem thêm
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
+                        <button
+                            onClick={() => setShowFullDescription(!showFullDescription)}
+                            className="mt-2 px-4 py-2 text-sm text-blue-600 border border-gray-300 rounded hover:bg-gray-50"
+                        >
+                            {showFullDescription ? 'Thu gọn' : 'Xem thêm'}
                         </button>
                     </div>
                 </div>
 
-                {/* Technical Specifications */}
-                <div className="space-y-6">
-                    <h3 className="text-xl font-bold text-gray-900">Thông số kỹ thuật</h3>
 
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">KIỂU DÁNG</div>
-                            <div className="col-span-2">
-                                <div className="flex flex-col gap-1">
-                                    <span>• Bluetooth</span>
-                                    <span>• On-ear</span>
-                                </div>
-                            </div>
-                        </div>
+                {/* Technical Specifications - chiếm 4 cột */}
+                <div className="lg:col-span-4 space-y-6">
+                    <div className="text-center">
+                        <h3 className="text-xl font-bold text-red-600 bg-gray-100 py-2 px-4 rounded-lg">Đặc Điểm Nổi Bật</h3>
+                    </div>
+                    <div className="overflow-x-auto text-center">
+                        <div
+                            className={`text-sm leading-relaxed pl-4 transition-all duration-300 ${showFullSpec ? '' : 'max-h-72 overflow-hidden'
+                                }`}
+                            dangerouslySetInnerHTML={{
+                                __html: (detailProduct?.specification || '')
+                                    .replace(
+                                        /<table>/g,
+                                        '<table class="w-full border-2 border-gray-200 text-sm text-left text-gray-700">'
+                                    )
+                                    .replace(
+                                        /<tr>/g,
+                                        '<tr class="border-b odd:bg-white even:bg-gray-200">'
+                                    )
+                                    .replace(
+                                        /<td>/g,
+                                        '<td class="px-4 py-3 align-top">'
+                                    )
+                                    .replace(
+                                        /<ul>/g,
+                                        '<ul class="list-disc list-inside space-y-1">'
+                                    ),
+                            }}
+                        />
 
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">ĐỊNH DẠNG BLUETOOTH</div>
-                            <div className="col-span-2">
-                                <div className="flex flex-col gap-1">
-                                    <span>• 5.4</span>
-                                    <span>• AAC</span>
-                                    <span>• SBC</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">TRỢ NĂNG</div>
-                            <div className="col-span-2">
-                                <div className="flex flex-col gap-1">
-                                    <span>• Chống ồn (ANC)</span>
-                                    <span>• Dual Connect</span>
-                                    <span>• Micro đàm thoại</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">THỜI LƯỢNG PIN</div>
-                            <div className="col-span-2">
-                                <span>• 58 giờ</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">KIỂU SẠC</div>
-                            <div className="col-span-2">
-                                <span>• Type-C</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">PHÍM BẤM</div>
-                            <div className="col-span-2">
-                                <span>• Phím vật lý</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">KÍCH THƯỚC DRIVER</div>
-                            <div className="col-span-2">
-                                <span>• 40mm</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200">
-                            <div className="font-medium text-gray-700">MÀU SẮC</div>
-                            <div className="col-span-2">
-                                <div className="flex flex-col gap-1">
-                                    <span>• Gold</span>
-                                    <span>• Hồng</span>
-                                    <span>• Đen</span>
-                                </div>
-                            </div>
-                        </div>
+                        <button
+                            onClick={() => setShowFullSpec(!showFullSpec)}
+                            className="mt-4 px-4 py-2 text-sm text-blue-600 border border-gray-300 rounded hover:bg-gray-50"
+                        >
+                            {showFullSpec ? 'Thu gọn' : 'Xem thêm'}
+                        </button>
                     </div>
 
-                    {/* <div className="text-right">
-                        <button className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 ml-auto">
-                            Xem cấu hình chi tiết
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                    </div> */}
-
                 </div>
-
-                {/* Reviews Section */}
             </div>
+
             <div className="my-16">
                 <h3 className="text-md md:text-2xl font-bold text-gray-900 mb-8">
-                    Đánh giá & nhận xét Tai nghe FiiO SNOWSKY Anytime (Bluetooth 5.4 | Pin 58h | Chống ồn ANC | Game Mode | Dual
-                    Connect)
+                    Đánh giá & nhận xét {detailProduct?.title}
                 </h3>
 
                 <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-8">

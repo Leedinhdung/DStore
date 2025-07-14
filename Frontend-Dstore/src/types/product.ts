@@ -24,7 +24,7 @@ export interface IVariant {
 	id: number;
 	product_id: number;
 	color: string;
-	price: string;
+	price: number;
 	images: IVariantImage[];
 }
 
@@ -32,4 +32,8 @@ export interface IVariantImage {
 	id: number;
 	product_variant_id: number;
 	image_path: string;
+}
+export interface IDetailProduct {
+	product: IProduct;
+	similarProducts: IProduct[];
 }

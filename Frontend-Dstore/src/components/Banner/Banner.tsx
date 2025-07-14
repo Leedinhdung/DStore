@@ -26,7 +26,7 @@ const Banner = () => {
         setActiveMenu(null)
     }
     return (
-        <div className="max-w-screen-xl mx-auto px-4 h-auto lg:h-[350px] mt-[120px] sm:mt-[80px]">
+        <div className="max-w-screen-xl mx-auto px-4 h-auto lg:h-[350px]">
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-4">
                 {/* Sidebar menu - chỉ hiện ở desktop */}
                 <div className="hidden lg:block col-span-1 rounded-xl shadow border border-gray-200 p-4 bg-white relative z-20">

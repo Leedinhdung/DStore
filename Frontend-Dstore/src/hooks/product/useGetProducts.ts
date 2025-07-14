@@ -1,5 +1,5 @@
 import { productApi } from "@/api/services/products/product";
-import { IProduct } from "@/types/product";
+import { IDetailProduct, IProduct } from "@/types/product";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 export const useGetProducts = (
@@ -20,5 +20,16 @@ export const useGetProductsByCategory = (
 		queryKey: ["products-by-category", slug],
 		enabled: !!slug,
 		queryFn: () => productApi.getProductByCategory(slug),
+	});
+};
+export const useGetProductsBySlug = (
+	slug: string,
+	options?: Omit<UseQueryOptions<IDetailProduct>, "queryKey" | "queryFn">
+) => {
+	return useQuery({
+		...options,
+		queryKey: ["detail-product", slug],
+		enabled: !!slug,
+		queryFn: () => productApi.getProductBySlug(slug),
 	});
 };
