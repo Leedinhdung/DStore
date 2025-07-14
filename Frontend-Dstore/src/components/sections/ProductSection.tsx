@@ -1,12 +1,13 @@
-import { Product, TabItem } from '@/constants/data';
+import { TabItem } from '@/constants/data';
 import SectionHeader from '@/components/common/SectionHeader';
 import ProductSwiper from '@/components/common/ProductSwiper';
 import ProductCard from '@/components/Product/ProductCard';
+import { IProduct } from '@/types/product';
 
 interface ProductSectionProps {
     title: string;
     tabs: TabItem[];
-    products: Product[];
+    products: IProduct[];
     activeTab: string;
     onTabChange: (value: string) => void;
     showViewAll?: boolean;

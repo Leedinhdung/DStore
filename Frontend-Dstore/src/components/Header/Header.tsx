@@ -27,7 +27,7 @@ const Header = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md">
+    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md fixed top-0 w-full py-2 z-30">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4 px-4 py-3">
         {/* Logo & Hamburger */}
         <div className="flex justify-between items-center md:justify-start">

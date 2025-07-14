@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { Link } from "react-router-dom";
 import routes from "@/routes/routes";
-import { Product, DEFAULT_PRODUCT } from "@/constants/data";
 import { priceFormat } from "@/helpers/formatHelper";
+import { IProduct } from "@/types/product";
+import { getImageUrl } from "@/lib/common";
 
 interface ProductCardProps {
-  product?: Product;
+  product: IProduct | undefined;
   showDiscount?: boolean;
   discountPercent?: number;
 }
@@ -16,19 +17,23 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false)
 
-  // Use provided product or fallback to default
-  const productData = product || DEFAULT_PRODUCT;
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite)
   }
 
-  const discountAmount = productData.priceOrigin - productData.price;
-  const actualDiscountPercent = Math.round((discountAmount / productData.priceOrigin) * 100);
+  const discountAmount = (product && product.original_price && product.sale_price)
+    ? product.original_price - product.sale_price
+    : 0;
+
+  const actualDiscountPercent = (product && product.original_price)
+    ? Math.round((discountAmount / product.original_price) * 100)
+    : 0;
+
 
   return (
     <div className=" bg-white rounded-2xl overflow-hidden border border-gray-200 shadow relative hover:shadow-lg">
-      {/* Discount Badge */}
+      {/* Nhãn giảm giá */}
       {showDiscount && actualDiscountPercent > 0 && (
         <div className="absolute top-3 left-3 z-10">
           <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
@@ -38,35 +43,35 @@ const ProductCard = ({
       )}
 
       <div className="p-4">
-        {/* Product Image */}
-        <Link to={routes.detailProduct} className='cursor-pointer'>
+        {/* Hình ảnh sản phẩm */}
+        <Link to={routes.detailProduct.replace(':slug', product?.slug || '')} className='cursor-pointer'>
           <div className="relative mb-4 flex justify-center">
             <img
-              src={productData.image}
-              alt={productData.name}
+              src={getImageUrl(product?.image || '')}
+              alt={product?.title}
               className="h-32 md:h-48 object-cover transition-transform duration-300 hover:scale-110"
             />
           </div>
 
-          {/* Product Title */}
-          <h3 className="text-gray-800 font-medium text-xs sm:text-base mb-3 line-clamp-2 hover:text-blue-400">
-            {productData.name}
+          {/* Tiêu đề sản phẩm */}
+          <h3 className="text-gray-800 font-medium text-xs sm:text-sm mb-3 line-clamp-2 hover:text-blue-400">
+            {product?.title}
           </h3>
         </Link>
 
-        {/* Price Section */}
+        {/* Phần giá */}
         <div className="mb-4">
           <div className="grid md:flex items-center gap-1">
-            <span className="text-red-600 font-bold text-sm">
-              {priceFormat(productData.price)}
+            <span className="text-red-600 font-bold text-base">
+              {priceFormat(product?.original_price || 0)}
             </span>
-            <span className="text-gray-400 line-through text-sm">
-              {priceFormat(productData.priceOrigin)}
-            </span>
+            {product?.sale_price == null ? null : <span className="text-gray-400 line-through text-xs font-semibold">
+              {priceFormat(product?.sale_price || 0)}
+            </span>}
           </div>
         </div>
 
-        {/* Rating */}
+        {/* Đánh giá sao */}
         <div className="flex items-center mb-4">
           {[...Array(5)].map((_, index) => (
             <svg key={index} className="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 24 24">
@@ -75,21 +80,22 @@ const ProductCard = ({
           ))}
         </div>
 
-        {/* Favorite Button */}
+        {/* Nút yêu thích */}
         <div className="flex justify-end">
           <button
             onClick={toggleFavorite}
             className="flex items-center text-gray-500 hover:text-red-500 transition-colors duration-200 p-1"
           >
+            <span className="text-xs">Yêu thích</span>
             <svg
-              className={`w-4 h-4 mr-1 ${isFavorite ? "fill-red-500 text-red-500" : "fill-none"}`}
+              className={`w-4 h-4 ml-1 ${isFavorite ? "fill-red-500 text-red-500" : "fill-none"}`}
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth="2"
             >
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
-           
+
           </button>
         </div>
       </div>

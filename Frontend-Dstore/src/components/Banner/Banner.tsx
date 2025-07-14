@@ -26,7 +26,7 @@ const Banner = () => {
         setActiveMenu(null)
     }
     return (
-        <div className="max-w-screen-xl mx-auto px-4 h-auto lg:h-[350px]">
+        <div className="max-w-screen-xl mx-auto px-4 h-auto lg:h-[350px] mt-[120px] sm:mt-[80px]">
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-4">
                 {/* Sidebar menu - chỉ hiện ở desktop */}
                 <div className="hidden lg:block col-span-1 rounded-xl shadow border border-gray-200 p-4 bg-white relative z-20">
@@ -38,15 +38,15 @@ const Banner = () => {
                                     menuRefs.current[index] = el as HTMLLIElement;
                                 }}
                                 onMouseEnter={() => handleMouseEnter(index)}
-                                className="relative"
+                                className="relative z-10"
                             >
                                 <Link
                                     to={routes.category.replace(":slug", item.slug)}
-                                    className="flex justify-between items-center text-sm font-medium cursor-pointer px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition-all duration-200"
+                                    className="flex justify-between items-center text-sm font-medium cursor-pointer px-3 py-2 rounded hover:bg-blue-400 hover:text-white transition-all duration-200"
                                 >
                                     <div className="flex items-center gap-2">
                                         <span
-                                            className="text-blue-500 group-hover:text-white"
+                                            className=" group-hover:text-white"
                                             dangerouslySetInnerHTML={{ __html: item.icon_svg }}
                                         />
                                         <span>{item.name}</span>

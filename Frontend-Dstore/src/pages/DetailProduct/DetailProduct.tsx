@@ -11,6 +11,9 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const DetailProduct = () => {
     const [selectedColor, setSelectedColor] = useState("black")
+    const [mainImage, setMainImage] = useState(
+        "https://songlongmedia.com/media/product/4172_tai_nghe_fiio_snowsky_anytime_black_songlongmedia__7_.jpg"
+    );
     const dispatch = useDispatch()
     const colors = [
         {
@@ -89,7 +92,7 @@ const DetailProduct = () => {
 
     const thumbnails = [
         "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
-        "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
+        "https://songlongmedia.com/media/product/2676_dac_amp_ifi_idsd_diablo_songlongmedia__1_.jpg",
         "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
         "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
         "https://songlongmedia.com/media/product/3629_skullcandy_crusher_evo_all_love_songlongmedia__1_.jpg",
@@ -113,11 +116,11 @@ const DetailProduct = () => {
                 {/* Product Images Section */}
                 <div className="space-y-4">
                     {/* Main Product Image */}
-                    <div className=" rounded-lg overflow-hidden">
+                    <div className="border-2 md:border-none rounded-lg overflow-hidden">
                         <img
-                            src="https://songlongmedia.com/media/product/4172_tai_nghe_fiio_snowsky_anytime_black_songlongmedia__7_.jpg"
-                            alt="FiiO SNOWSKY Anytime Headphones"
-                            className="w-full h-[510px] object-contain"
+                            src={mainImage}
+                            alt="Main Product"
+                            className="h-auto max-h-[500px] sm:h-[510px]"
                         />
                     </div>
 
@@ -126,6 +129,7 @@ const DetailProduct = () => {
                         {thumbnails.map((thumb, index) => (
                             <div
                                 key={index}
+                                onClick={() => setMainImage(thumb)}
                                 className="flex-shrink-0 w-28 h-28 bg-gray-100 rounded-lg overflow-hidden border hover:border-gray-300 cursor-pointer"
                             >
                                 <img
@@ -137,6 +141,7 @@ const DetailProduct = () => {
                         ))}
                     </div>
                 </div>
+
 
                 {/* Product Details Section */}
                 <div className="space-y-6">
@@ -347,12 +352,12 @@ const DetailProduct = () => {
                 </div>
             </div>
             <div className="py-6">
-                <div className="shadow p-5 rounded-xl ">
+                <div className="shadow p-2.5 md:p-5 rounded-xl ">
                     <h2 className="font-bold text-xl">Sản phẩm tương tự</h2>
                     <Swiper
-                        spaceBetween={16}
+                        spaceBetween={10}
                         breakpoints={{
-                            320: { slidesPerView: 1 },
+                            320: { slidesPerView: 2 },
                             640: { slidesPerView: 2 },
                             768: { slidesPerView: 3 },
                             1024: { slidesPerView: 4 },
@@ -556,66 +561,72 @@ const DetailProduct = () => {
                         </div>
                     </div>
 
-                    <div className="text-right">
+                    {/* <div className="text-right">
                         <button className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 ml-auto">
                             Xem cấu hình chi tiết
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
 
                 </div>
-                {/* Reviews Section */}
 
+                {/* Reviews Section */}
             </div>
-            <div className="mb-16">
-                <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            <div className="my-16">
+                <h3 className="text-md md:text-2xl font-bold text-gray-900 mb-8">
                     Đánh giá & nhận xét Tai nghe FiiO SNOWSKY Anytime (Bluetooth 5.4 | Pin 58h | Chống ồn ANC | Game Mode | Dual
                     Connect)
                 </h3>
 
-                <div className="bg-white border-2 border-gray-200 rounded-2xl p-8">
-                    <div className="flex gap-12">
+                <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-8">
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
                         {/* Overall Rating */}
-                        <div className="text-center space-y-6">
-                            <div className="text-7xl font-bold text-gray-900">0/5</div>
-                            <div className="flex justify-center gap-2">
+                        <div className="text-center space-y-4 lg:space-y-6">
+                            <div className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900">0/5</div>
+                            <div className="flex justify-center gap-1 sm:gap-2">
                                 {[1, 2, 3, 4, 5].map((star) => (
-                                    <svg key={star} className="w-10 h-10 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg
+                                        key={star}
+                                        className="w-8 h-8 sm:w-10 sm:h-10 text-orange-400"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
                                 ))}
                             </div>
-                            <div className="text-gray-600 text-lg">0 đánh giá và nhận xét</div>
+                            <div className="text-gray-600 text-base sm:text-lg">0 đánh giá và nhận xét</div>
                         </div>
 
                         {/* Rating Breakdown */}
-                        <div className="w-full space-y-4">
+                        <div className="w-full overflow-x-auto space-y-4">
                             {[5, 4, 3, 2, 1].map((rating) => (
-                                <div key={rating} className="flex items-center gap-4">
-                                    <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
-                                        <span className="text-lg font-semibold">{rating}</span>
-                                        <svg className="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                                <div key={rating} className="flex items-center gap-4 min-w-[320px] sm:min-w-0">
+                                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                                        <span className="text-sm sm:text-lg font-semibold">{rating}</span>
+                                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     </div>
                                     <div className="flex-1 bg-gray-200 rounded-full h-3">
                                         <div className="bg-gray-300 h-3 rounded-full" style={{ width: "0%" }}></div>
                                     </div>
-                                    <span className="text-gray-600 font-medium">0 bình luận</span>
+                                    <span className="text-gray-600 text-sm sm:text-base font-medium">0 bình luận</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="text-center mt-8">
-                        <p className="text-gray-600 mb-4">Bạn đánh giá sao sản phẩm này?</p>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-xl transition-colors text-lg">
+                    <div className="text-center mt-6 sm:mt-8">
+                        <p className="text-gray-600 text-sm sm:text-base mb-4">Bạn đánh giá sao sản phẩm này?</p>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-xl transition-colors text-base sm:text-lg">
                             Đánh giá ngay
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     );
