@@ -49,6 +49,7 @@ const ProductCard = ({
             <img
               src={getImageUrl(product?.image || '')}
               alt={product?.title}
+              loading="lazy"
               className="h-32 md:h-48 object-cover transition-transform duration-300 hover:scale-110"
             />
           </div>
@@ -62,14 +63,25 @@ const ProductCard = ({
         {/* Phần giá */}
         <div className="mb-4">
           <div className="grid md:flex items-center gap-1">
-            <span className="text-red-600 font-bold text-base">
-              {priceFormat(product?.original_price || 0)}
-            </span>
-            {product?.sale_price == null ? null : <span className="text-gray-400 line-through text-xs font-semibold">
-              {priceFormat(product?.sale_price || 0)}
-            </span>}
+            {product?.sale_price
+              ? (
+                <>
+                  <span className="text-red-600 font-bold text-base">
+                    {priceFormat(product.sale_price)}
+                  </span>
+                  <span className="text-gray-400 line-through text-xs font-semibold">
+                    {priceFormat(product.original_price)}
+                  </span>
+                </>
+              )
+              : (
+                <span className="text-red-600 font-bold text-base">
+                  {priceFormat(product?.original_price || 0)}
+                </span>
+              )}
           </div>
         </div>
+
 
         {/* Đánh giá sao */}
         <div className="flex items-center mb-4">

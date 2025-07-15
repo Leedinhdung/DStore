@@ -6,6 +6,7 @@ const Review = () => {
                     src="https://songlongmedia.com/media/lib/02-04-2024/dinh-manh-ninh-songlongmedia-tang-ao-beats-31-12-2012.jpg"
                     className="rounded-full h-24 w-24 md:h-48 md:w-48 object-cover"
                     alt=""
+                    loading="lazy"
                 />
             </div>
             <div className="flex-1">

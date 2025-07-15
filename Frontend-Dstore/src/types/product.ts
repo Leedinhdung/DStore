@@ -18,6 +18,7 @@ export interface IProduct {
 	short_description: string;
 	variants: IVariant[];
 	category: ICategory;
+	created_at: string;
 }
 
 export interface IVariant {

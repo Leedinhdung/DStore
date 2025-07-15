@@ -106,6 +106,7 @@ const Banner = () => {
                             <SwiperSlide key={index}>
                                 <img
                                     src={banner.url ? banner.url : getImageUrl(banner.image)}
+                                    loading='lazy'
                                     className="w-full h-full object-fit rounded-2xl shadow"
                                     alt={`banner-${index}`}
                                 />
