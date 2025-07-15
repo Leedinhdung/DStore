@@ -5,6 +5,7 @@ const Post = () => {
                 <img
                     src="https://songlongmedia.com/media/news/778-thumb.jpg"
                     alt=""
+                    loading="lazy"
                     className="transition-transform duration-300 hover:scale-110"
                 />
             </div>

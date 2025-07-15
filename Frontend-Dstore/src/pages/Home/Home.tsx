@@ -32,6 +32,7 @@ const Home = () => {
 				<img
 					src={IMAGES.PROMOTIONAL_BANNER}
 					alt="Promotional Banner"
+					loading='lazy'
 					className="w-full rounded-lg md:rounded-xl shadow"
 				/>
 			</div>
@@ -44,6 +45,7 @@ const Home = () => {
 					<img
 						src={IMAGES.FLASH_SALE_BG}
 						alt="Flash Sale Background"
+						loading='lazy'
 						className="absolute inset-0 w-full h-full object-cover z-0"
 					/>
 

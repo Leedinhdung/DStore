@@ -17,7 +17,6 @@ export const PRODUCT_CATEGORIES = {
 	SPEAKERS: "speakers",
 } as const;
 
-
 export const PRODUCTS_DATA: Record<string, Product[]> = {
 	trueWireless: [
 		{
@@ -90,7 +89,7 @@ export const SWIPER_BREAKPOINTS = {
 } as const;
 
 export const SWIPER_BREAKPOINTS_SMALL = {
-	0: { slidesPerView: 2 }, 
+	0: { slidesPerView: 2 },
 	480: { slidesPerView: 2 },
 	640: { slidesPerView: 3 },
 	768: { slidesPerView: 3 },
@@ -113,4 +112,6 @@ export const IMAGES = {
 		"https://songlongmedia.com/media/banner/09_Maye732e344e8d2b51085a4e72cfaa773d2.png",
 	FLASH_SALE_BG:
 		"https://songlongmedia.com/static/assets/2023/images/home-deal-bg.png",
+	OUTSTANDING_PRODUCT:
+		"https://songlongmedia.com/static/assets/2023/images/category-hot-product-bg.png",
 } as const;

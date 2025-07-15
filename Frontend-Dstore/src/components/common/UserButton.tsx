@@ -59,6 +59,7 @@ const UserButton = () => {
                             <img
                                 src={user.avatar}
                                 alt={user.full_name || 'User'}
+                                loading='lazy'
                                 className="w-full h-full object-cover"
                             />
                         </div>

@@ -41,6 +41,7 @@ const CartItem = ({ item }: CartItemProps) => {
                 <div className="col-span-2 flex flex-col items-center justify-between">
                     <img
                         src={item.image}
+                        loading="lazy"
                         className="w-36"
                         alt={item.name}
                     />

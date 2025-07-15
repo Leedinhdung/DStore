@@ -47,6 +47,7 @@ const DetailProduct = () => {
                         <img
                             src={getImageUrl(mainImage || detailProduct?.image || '')}
                             alt={detailProduct?.title}
+                            loading="lazy"
                             className="h-auto max-h-[500px] sm:h-[510px] object-cover rounded-lg mx-auto"
                         />
                     </div>
@@ -75,6 +76,7 @@ const DetailProduct = () => {
                                         <img
                                             src={getImageUrl(img.image_path) || "/placeholder.svg"}
                                             alt={`Thumbnail ${variantIndex + 1}-${imgIndex + 1}`}
+                                            loading="lazy"
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
@@ -208,7 +210,7 @@ const DetailProduct = () => {
 
                 </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-1 pt-8 border-t border-gray-200">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-1 pt-8 border-gray-200">
                 {/* Product Information */}
                 <div className="space-y-4 border p-5 rounded-lg">
                     <h3 className="text-xl font-bold text-gray-900">Thông tin sản phẩm</h3>
