@@ -16,6 +16,9 @@ import { useDebounce } from '@/hooks/common/useDebounce'
 import { useSearch } from '@/hooks/other/useOther'
 import { getImageUrl } from '@/lib/common'
 import { priceFormat } from '@/helpers/formatHelper'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
+
 const Header = () => {
   const [user, setUser] = useState<IUser | null>(null)
   const [search, setSearch] = useState("")
@@ -25,13 +28,18 @@ const Header = () => {
   const debounceSearch = useDebounce(search, 500)
   const { data, isLoading } = useSearch(debounceSearch)
   const boxRef = useRef<HTMLDivElement>(null)
-  console.log(data)
+
+  const totalQuantity = useSelector((state: RootState) => {
+    return state.cart.products.reduce((sum, item) => sum + item.quantity, 0);
+  });
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user_data')
     if (storedUser) {
       setUser(JSON.parse(storedUser))
     }
   }, [])
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
@@ -47,6 +55,7 @@ const Header = () => {
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
+
   return (
     <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md fixed top-0 w-full py-2 z-30 ">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4 px-4 py-3">
@@ -66,7 +75,7 @@ const Header = () => {
                 <ShoppingCartIcon className="w-4 h-4" />
               </div>
               <span className="absolute -top-2 left-4 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                0
+                {totalQuantity}
               </span>
             </Link>
             <button
@@ -166,7 +175,7 @@ const Header = () => {
             </div>
             <span className="text-sm">Giỏ hàng</span>
             <span className="absolute -top-2 left-4 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              0
+              {totalQuantity}
             </span>
           </Link>
           {/* User */}
@@ -180,12 +189,68 @@ const Header = () => {
             type="text"
             placeholder="Bạn cần tìm gì?"
             className="w-full pl-10 pr-4 py-2 rounded-full outline-none text-gray-700 focus:ring-2 focus:ring-blue-400"
+            onChange={(e) => setSearch(e.target.value)}
+            onClick={() => setVisible(true)}
           />
           <SearchIcon
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             size={18}
           />
         </div>
+        {search.length > 0 && visible && (
+          <div
+            ref={boxRef}
+            className="absolute top-[100%] z-40 w-screen max-w-full sm:hidden left-0 right-0 mx-auto rounded-lg border bg-white px-3 py-2 shadow-lg text-black"
+          >
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                {isLoading && search.length > 1 ? (
+                  <div className="flex items-center justify-center">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                  </div>
+                ) : (
+                  <SearchIcon className="size-4 text-primary" />
+                )}
+                <span className="text-gray-600 text-sm">Kết quả cho '{search}'</span>
+              </div>
+
+              {data && data.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {data.map((item, index) => (
+                    <Link
+                      to={routes.detailProduct.replace(':slug', item.slug)}
+                      key={index}
+                      className="flex items-center gap-3 border-b pb-2"
+                      onClick={() => setVisible(false)}
+                    >
+                      <img
+                        src={getImageUrl(item.image)}
+                        alt={item.title}
+                        className="h-10 w-10 rounded-md object-cover"
+                      />
+                      <div className="flex flex-col text-sm">
+                        <span className="line-clamp-1 font-medium">{item.title}</span>
+                        {item.sale_price == null ? (
+                          <span className="text-red-500 font-semibold text-xs">
+                            {priceFormat(item.original_price || 0)}
+                          </span>
+                        ) : (
+                          <div className="flex items-center gap-1 text-xs">
+                            <span className="text-red-500 font-semibold">
+                              {priceFormat(item.sale_price || 0)}
+                            </span>
+                            <del className="text-gray-400">{priceFormat(item.original_price || 0)}</del>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       </div>
       {/* Mobile Drawer */}
       {isDrawerOpen && (
