@@ -31,3 +31,4 @@ Route::get('chi-tiet-san-pham/{slug}',[ProductController::class,'getProductsBySl
 
 Route::get('banners',[BannerController::class,'getBanners']);
 
+Route::get('search',[ProductController::class,'searchProduts']);

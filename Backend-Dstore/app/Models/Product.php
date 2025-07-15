@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
-    use HasFactory, softDeletes;
+    use HasFactory, softDeletes, Searchable;
     protected $fillable = [
         'category_id',
         'title',
@@ -32,5 +33,12 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+    public function toSearchable()
+    {
+        return [
+            'title' => $this->title,
+            'brand' => $this->brand
+        ];
     }
 }
