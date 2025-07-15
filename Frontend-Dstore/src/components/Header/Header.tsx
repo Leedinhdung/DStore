@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   MenuIcon,
@@ -12,17 +12,38 @@ import routes from '@/routes/routes'
 import UserButton from '@/components/common/UserButton'
 import { IUser } from '@/types/user'
 import { useGetCategories } from '@/hooks/category/useGetCategories'
+import { useDebounce } from '@/hooks/common/useDebounce'
+import { useSearch } from '@/hooks/other/useOther'
+import { getImageUrl } from '@/lib/common'
+import { priceFormat } from '@/helpers/formatHelper'
 const Header = () => {
   const [user, setUser] = useState<IUser | null>(null)
+  const [search, setSearch] = useState("")
+  const [visible, setVisible] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { data: categories } = useGetCategories()
+  const debounceSearch = useDebounce(search, 500)
+  const { data, isLoading } = useSearch(debounceSearch)
+  const boxRef = useRef<HTMLDivElement>(null)
+  console.log(data)
   useEffect(() => {
     const storedUser = localStorage.getItem('user_data')
     if (storedUser) {
       setUser(JSON.parse(storedUser))
     }
   }, [])
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+        setVisible(false)
+      }
+    }
 
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
@@ -59,11 +80,13 @@ const Header = () => {
 
         </div>
         {/* Search bar - desktop only */}
-        <div className="hidden md:flex justify-center relative">
+        <div className="hidden md:flex justify-center relative text-black">
           <div className="relative w-full max-w-md">
             <input
               type="text"
               placeholder="Bạn cần tìm gì?"
+              onChange={(e) => setSearch(e.target.value)}
+              onClick={() => setVisible(true)}
               className="w-full pl-10 pr-4 py-2 rounded-full outline-none text-gray-700 focus:ring-2 focus:ring-blue-400"
             />
             <SearchIcon
@@ -71,6 +94,55 @@ const Header = () => {
               size={18}
             />
           </div>
+          {search.length > 0 && visible && (
+            <div
+              ref={boxRef}
+              className="absolute top-[120%] z-40 max-h-[75vh] w-full overflow-y-auto rounded-lg border bg-white px-4 py-3 shadow"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  {isLoading && search.length > 1 ? (
+                    <div className="flex items-center justify-center">
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-darkGrey border-t-transparent"></div>
+                    </div>
+                  ) : (
+                    <SearchIcon className="size-5 text-primary" />
+                  )}
+                  <span className="text-darkGrey">Kết quả cho '{search}'</span>
+                </div>
+                {data && data.length > 0 && (
+                  <div>
+                    <div className="flex flex-col gap-3">
+                      {data?.map((item, index) => (
+                        <Link
+                          to={routes.detailProduct.replace(':slug', item.slug)}
+                          key={index}
+                          className="flex items-center gap-4 border-b"
+                          onClick={() => setVisible(false)}
+                        >
+                          <img
+                            src={getImageUrl(item.image)}
+                            alt={item.title}
+                            className="h-10 w-10 rounded-full"
+                          />
+                          <div>
+                            <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
+                              {item.title}
+                            </h3>
+                            {item?.sale_price == null ? <span className='text-red-500 font-medium text-sm'>{priceFormat(item?.original_price || 0)}</span> : <div>
+                              <span className='text-red-500 text-sm font-medium'>{priceFormat(item?.sale_price || 0)}</span> <del className='text-gray-500 text-xs'>{priceFormat(item?.original_price || 0)}</del>
+                            </div>}
+                          </div>
+
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          )}
         </div>
         {/* Info section - desktop only */}
         <div className="hidden md:flex justify-end items-center space-x-5">

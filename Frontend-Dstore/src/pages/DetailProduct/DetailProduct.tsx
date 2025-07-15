@@ -54,8 +54,8 @@ const DetailProduct = () => {
                     <Swiper
                         spaceBetween={10}
                         breakpoints={{
-                            320: { slidesPerView: 4 },
-                            640: { slidesPerView: 5 },
+                            320: { slidesPerView: 3 },
+                            640: { slidesPerView: 4 },
                             768: { slidesPerView: 5 },
                             1024: { slidesPerView: 5 },
                             1280: { slidesPerView: 5 },
