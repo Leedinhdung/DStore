@@ -56,7 +56,14 @@ class ProductController extends Controller
     {
         try {
             $category = Category::where('slug', $slug)->first();
-            $listProducts = $category->products()->get();
+            if ($category->parent_id === null) {
+                $childIds = $category->children()->pluck('id')->toArray();
+                $allCategoryIds = array_merge([$category->id], $childIds);
+                $listProducts = Product::whereIn('category_id', $allCategoryIds)->get();
+            } else {
+                $listProducts = $category->products()->get();
+            }
+
             return response()->json([
                 'status' => 'success',
                 'data' => $listProducts
