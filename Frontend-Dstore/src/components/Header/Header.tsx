@@ -22,8 +22,8 @@ const Header = () => {
   const [visible, setVisible] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { data: categories } = useGetCategories()
-  const deboundSearch = useDebounce(search, 500)
-  const { data, isLoading } = useSearch(deboundSearch)
+  const debounceSearch = useDebounce(search, 500)
+  const { data, isLoading } = useSearch(debounceSearch)
   const boxRef = useRef<HTMLDivElement>(null)
   console.log(data)
   useEffect(() => {
