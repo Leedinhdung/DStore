@@ -104,4 +104,12 @@ class ProductController extends Controller
             ], 500);
         }
     }
+    public function searchProduts(Request $request){
+        $query=$request->input('q');
+        $result=Product::search($query)->get();
+        return response()->json([
+                'status' => 'success',
+                'data' => $result
+            ], 200);
+    }
 }
