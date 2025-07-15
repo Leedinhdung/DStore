@@ -1,8 +1,10 @@
+import { RootState } from "@/app/store";
 import { Product } from "@/constants/data";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface CartProduct extends Product {
 	quantity: number;
+	title: string;
 }
 
 interface CartState {
@@ -59,6 +61,8 @@ export const cartSlice = createSlice({
 	},
 });
 
+export const selectTotalQuantity = (state: RootState) =>
+	state.cart.products.reduce((sum, item) => sum + item.quantity, 0);
 // Action creators are generated for each case reducer function
 export const {
 	addToCart,

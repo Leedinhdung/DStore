@@ -42,7 +42,7 @@ const Cart = () => {
     }
 
     return (
-        <div className="max-w-screen-xl mx-auto">
+        <div className="max-w-screen-xl mx-auto mt-3 px-3">
             <Breadcrumbs
                 separator={<FaChevronRight fontSize="small" />}
                 aria-label="breadcrumb">
@@ -52,10 +52,10 @@ const Cart = () => {
                 <Typography color="text.primary">Thông tin giỏ hàng</Typography>
             </Breadcrumbs>
 
-            <div className="max-w-screen-md mx-auto">
+            <div className="max-w-screen-md mx-auto ">
                 <div className="flex flex-col gap-5">
-                    <div className="flex">
-                        <Link to={routes.detailProduct} className="flex items-center gap-1 font-bold">
+                    <div className="flex mt-5">
+                        <Link to={routes.home} className="flex items-center gap-1 font-bold">
                             ← Trở về
                         </Link>
                         <h2 className="mx-auto font-bold">Giỏ hàng</h2>
@@ -76,9 +76,11 @@ const Cart = () => {
                             <button className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">
                                 Tiến hành đặt hàng
                             </button>
-                            <button className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">
-                                Chọn thêm sản phẩm khác
-                            </button>
+                            <Link to={routes.home}>
+                                <button className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">
+                                    Chọn thêm sản phẩm khác
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

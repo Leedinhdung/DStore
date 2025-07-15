@@ -1,5 +1,6 @@
 import { CartProduct, removeFromCart, updateQuantityProduct } from "@/features/cart/cartSlice";
-import { percentFormat, priceFormat } from "@/helpers/formatHelper";
+import { priceFormat } from "@/helpers/formatHelper";
+import { getImageUrl } from "@/lib/common";
 import { validateQuantity } from "@/utils/validation";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -40,9 +41,9 @@ const CartItem = ({ item }: CartItemProps) => {
                 {/* Cột ảnh và nút xóa */}
                 <div className="col-span-2 flex flex-col items-center justify-between">
                     <img
-                        src={item.image}
+                        src={getImageUrl(item.image)}
                         loading="lazy"
-                        className="w-36"
+                        className="w-36 rounded-xl"
                         alt={item.name}
                     />
                     <Button
@@ -55,22 +56,17 @@ const CartItem = ({ item }: CartItemProps) => {
 
                 {/* Cột thông tin sản phẩm */}
                 <div className="col-span-4 space-y-3">
-                    <p className="font-medium text-lg">
-                        {item.name}
+                    <p className="font-medium text-sm">
+                        {item.title}
                     </p>
                     <p>Màu sắc: <span className="font-medium">{item.color}</span></p>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-5">
+                        <div className="flex items-center gap-2">
+                            <p>Giá:</p>
                             <p className="text-lg font-semibold text-red-600">
                                 {priceFormat(item.price)}
                             </p>
-                            <del className="text-gray-500 text-sm font-medium">
-                                {priceFormat(item.priceOrigin)}
-                            </del>
-                        </div>
-                        <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                            {percentFormat((item.priceOrigin - item.price) / item.priceOrigin)}
                         </div>
                     </div>
 

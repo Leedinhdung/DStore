@@ -9,6 +9,7 @@ import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -200,7 +201,22 @@ const DetailProduct = () => {
                             </div>
                         </button>
                         <button
-                            onClick={() => dispatch(addToCart(detailProduct))}
+                            onClick={() => {
+                                const selectedVariant = detailProduct?.variants.find((v) => v.id === selectedColor);
+                                if (!selectedVariant) {
+                                    toast.warning('Vui lòng chọn màu sắc')
+                                    return
+                                }
+                                dispatch(addToCart({
+                                    id: selectedVariant.id,
+                                    title: detailProduct?.title,
+                                    price: selectedVariant.price,
+                                    image: selectedVariant.images?.[0]?.image_path || detailProduct?.image,
+                                    brand: detailProduct?.brand,
+                                    sku: detailProduct?.sku,
+                                    color: selectedVariant.color,
+                                }))
+                            }}
                             className="bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-lg transition-colors"
                         >
                             <div className="text-lg font-bold">THÊM VÀO GIỎ HÀNG</div>
