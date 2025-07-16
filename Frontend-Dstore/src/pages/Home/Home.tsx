@@ -8,21 +8,25 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useGetCategories } from '@/hooks/category/useGetCategories';
-import { useGetProducts } from '@/hooks/product/useGetProducts';
+import { useGetProducts, useGetProductsSale } from '@/hooks/product/useGetProducts';
 import { ICategory } from '@/types/category';
 import { IProduct } from '@/types/product';
+import ProductCard from '@/components/Product/ProductCard';
+import { Loading } from '@/components/Loading/Loading';
+
 
 const Home = () => {
 	const { activeTab, onTabActive } = useProducts();
-	const { data: product } = useGetProducts()
-	const { data: categories } = useGetCategories()
-	console.log(product)
+	const { data: product, isLoading: productLoading } = useGetProducts()
+	const { data: categories, isLoading: catLoading } = useGetCategories()
+	const { data: productsSale, isLoading: saleLoading } = useGetProductsSale()
+	
 	const getFilteredProducts = (category: ICategory): IProduct[] => {
 		const list = product?.[category.slug] || [];
 		const isFiltering = activeTab && category.children.some(c => c.slug === activeTab);
 		return isFiltering ? list.filter((p: IProduct) => p.category?.slug === activeTab) : list;
 	};
-
+	if (productLoading && catLoading && saleLoading) return <Loading />
 	return (
 		<div>
 			<Banner />
@@ -70,16 +74,11 @@ const Home = () => {
 								modules={[Autoplay]}
 								className="h-full"
 							>
-								{/* {product?.data &&
-									Object.values(product.data)
-										.flat()
-										.slice(0, 10) 
-										.map((item, i) => (
-											<SwiperSlide key={i}>
-												<ProductCard product={item} />
-											</SwiperSlide>
-										))} */}
-
+								{productsSale && productsSale.map((item, i) => (
+									<SwiperSlide key={i}>
+										<ProductCard product={item} />
+									</SwiperSlide>
+								))}
 							</Swiper>
 						</div>
 

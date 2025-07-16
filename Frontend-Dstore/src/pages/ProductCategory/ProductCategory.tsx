@@ -16,6 +16,7 @@ const ProductCategory = () => {
     const { data } = useGetProductsByCategory(slug!)
     const [sortType, setSortType] = useState("default");
     const [sortedData, setSortedData] = useState<IProduct[] | undefined>([]);
+    // const { data: productsOutstanding, isLoading } = useGetProductsOutstanding()
 
     const banners = [
         'https://songlongmedia.com/media/banner/09_Apr8aeb4075d06a0eb166c58d9c99e61ba6.jpg',
@@ -142,15 +143,11 @@ const ProductCategory = () => {
                                 modules={[Autoplay]}
                                 className="h-full"
                             >
-                                {/* {product?.data &&
-                                    Object.values(product.data)
-                                        .flat()
-                                        .slice(0, 10) 
-                                        .map((item, i) => (
-                                            <SwiperSlide key={i}>
-                                                <ProductCard product={item} />
-                                            </SwiperSlide>
-                                        ))} */}
+                                {/* {productsOutstanding && productsOutstanding.map((item, i) => (
+                                    <SwiperSlide key={i}>
+                                        <ProductCard product={item} />
+                                    </SwiperSlide>
+                                ))} */}
 
                             </Swiper>
                         </div>

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -104,12 +105,58 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    public function searchProduts(Request $request){
-        $query=$request->input('q');
-        $result=Product::search($query)->get();
+    public function searchProduts(Request $request)
+    {
+        $query = $request->input('q');
+        $result = Product::search($query)->get();
         return response()->json([
-                'status' => 'success',
-                'data' => $result
-            ], 200);
+            'status' => 'success',
+            'data' => $result
+        ], 200);
     }
+    public function getProductSale()
+    {
+        try {
+            $products = Product::whereNotNull('sale_price')
+                ->whereColumn('sale_price', '<', 'original_price')
+                ->with('variants')
+                ->select('*')
+                ->orderByRaw('(original_price - sale_price) / original_price DESC')
+                ->limit(10)
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $products
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Đã xảy ra lỗi .',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    // public function getBestSellingProducts()
+    // {
+    //     try {
+    //         $products = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_sold'))
+    //             ->join('order_items', 'products.id', '=', 'order_items.product_id')
+    //             ->groupBy('products.id')
+    //             ->orderByDesc('total_sold')
+    //             ->limit(10)
+    //             ->get();
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'data' => $products
+    //         ]);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Đã xảy ra lỗi .',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 }

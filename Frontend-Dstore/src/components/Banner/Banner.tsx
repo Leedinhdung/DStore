@@ -1,3 +1,4 @@
+import { Loading } from '@/components/Loading/Loading'
 import { useGetBanners } from '@/hooks/banner/useGetBanners'
 import { useGetCategories } from '@/hooks/category/useGetCategories'
 import { getImageUrl } from '@/lib/common'
@@ -11,8 +12,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 const Banner = () => {
     const [activeMenu, setActiveMenu] = useState<number | null>(null)
     const menuRefs = useRef<HTMLLIElement[]>([])
-    const { data: categories } = useGetCategories()
-    const { data: banners } = useGetBanners()
+    const { data: categories, isLoading: catLoading } = useGetCategories()
+    const { data: banners, isLoading: bannerLoading } = useGetBanners()
     const bannerRight = [
         'https://songlongmedia.com/media/banner/08_Apr8e56a105c1e82db38d84863b41a89e09.jpg',
         'https://songlongmedia.com/media/banner/08_Apr4be4c95a7324e1a546a0fe00b88ee650.jpg',
@@ -25,6 +26,7 @@ const Banner = () => {
     const handleMouseLeave = () => {
         setActiveMenu(null)
     }
+    if (catLoading && bannerLoading) return <Loading />
     return (
         <div className="max-w-screen-xl mx-auto px-4 h-auto lg:h-[350px]">
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-4">

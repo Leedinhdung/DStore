@@ -1,3 +1,4 @@
+import AddToCartModal from "@/components/modals/AddToCartModal";
 import ProductCard from "@/components/Product/ProductCard";
 import { addToCart } from "@/features/cart/cartSlice";
 import { percentFormat, priceFormat } from "@/helpers/formatHelper";
@@ -21,6 +22,7 @@ const DetailProduct = () => {
     const [mainImage, setMainImage] = useState<string | undefined>(
         detailProduct?.image
     );
+    const [modalOpen, setModalOpen] = useState(false)
     const dispatch = useDispatch()
     const [showFullSpec, setShowFullSpec] = useState(false);
     const [showFullDescription, setShowFullDescription] = useState(false);
@@ -140,29 +142,33 @@ const DetailProduct = () => {
 
                     {/* Price */}
                     <div className="flex items-center gap-4">
-                        {detailProduct?.sale_price != null ? (
+                        {detailProduct?.sale_price == null ? (
                             <>
                                 <p className="text-4xl font-bold text-red-600">
-                                    {priceFormat(detailProduct.sale_price)}
+                                    {priceFormat(detailProduct?.original_price || 0)}
+                                </p>
+
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-[32px] font-bold text-red-600">
+                                    {priceFormat(detailProduct?.sale_price || 0)}
                                 </p>
                                 <del className="text-gray-500 text-base font-medium">
                                     {priceFormat(detailProduct.original_price || 0)}
                                 </del>
-                            </>
-                        ) : (
-                            <p className="text-[32px] font-bold text-red-600">
-                                {priceFormat(detailProduct?.original_price || 0)}
-                            </p>
-                        )}
-                        <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                            {detailProduct?.sale_price != null && detailProduct?.original_price
-                                ? percentFormat(
-                                    (detailProduct.original_price - detailProduct.sale_price) /
-                                    detailProduct.original_price
-                                )
-                                : null}
+                                <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                                    {detailProduct?.sale_price != null && detailProduct?.original_price
+                                        ? percentFormat(
+                                            (detailProduct.original_price - detailProduct.sale_price) /
+                                            detailProduct.original_price
+                                        )
+                                        : null}
 
-                        </div>
+                                </div>
+                            </>
+                        )}
+
                     </div>
 
                     {/* Lựa chọn phân loại */}
@@ -207,6 +213,7 @@ const DetailProduct = () => {
                                     toast.warning('Vui lòng chọn màu sắc')
                                     return
                                 }
+                                setModalOpen(true)
                                 dispatch(addToCart({
                                     id: selectedVariant.id,
                                     title: detailProduct?.title,
@@ -222,6 +229,7 @@ const DetailProduct = () => {
                             <div className="text-lg font-bold">THÊM VÀO GIỎ HÀNG</div>
                             <div className="text-sm opacity-90 font-medium">Tiếp tục mua sắm</div>
                         </button>
+                        <AddToCartModal open={modalOpen} onClose={() => setModalOpen(false)} />
                     </div>
 
                 </div>
