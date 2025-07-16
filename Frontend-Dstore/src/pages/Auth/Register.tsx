@@ -50,7 +50,11 @@ const Register = ({ onSwitchToLogin }: RegisterProps) => {
             setUserEmail(data.email)
             setShowOTPModal(true)
         } catch (error: unknown) {
-            const err = error as { response?: { data?: { errors?: any } }, message?: string };
+            const err = error as {
+                response?: {
+                    data?: { errors?: string }
+                }, message?: string
+            };
             console.error('Error details:', err.response, err.message);
 
             if (err?.response?.data?.errors) {

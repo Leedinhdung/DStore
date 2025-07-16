@@ -12,4 +12,10 @@ export const productApi = {
 	getProductBySlug: async (slug: string): Promise<IDetailProduct> => {
 		return axiosClient.get(productUri.DETAIL_PRODUCT(slug));
 	},
+	getProductsSale: async (): Promise<IProduct[]> => {
+		return axiosClient.get(productUri.PRODUCTS_SALE);
+	},
+	// getProductsOutstanding: async (): Promise<IProduct[]> => {
+	// 	return axiosClient.get(productUri.PRODUCTS_OUTSTANDING);
+	// },
 };

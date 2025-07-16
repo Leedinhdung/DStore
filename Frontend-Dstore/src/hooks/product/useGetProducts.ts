@@ -11,6 +11,24 @@ export const useGetProducts = (
 		queryFn: productApi.getProduts,
 	});
 };
+export const useGetProductsSale = (
+	options?: Omit<UseQueryOptions<IProduct[]>, "queryKey" | "queryFn">
+) => {
+	return useQuery<IProduct[]>({
+		...options,
+		queryKey: ["products-sale"],
+		queryFn: productApi.getProductsSale,
+	});
+};
+// export const useGetProductsOutstanding = (
+// 	options?: Omit<UseQueryOptions<IProduct[]>, "queryKey" | "queryFn">
+// ) => {
+// 	return useQuery<IProduct[]>({
+// 		...options,
+// 		queryKey: ["products-outstanding"],
+// 		queryFn: productApi.getProductsOutstanding,
+// 	});
+// };
 export const useGetProductsByCategory = (
 	slug: string,
 	options?: Omit<UseQueryOptions<IProduct[]>, "queryKey" | "queryFn">
