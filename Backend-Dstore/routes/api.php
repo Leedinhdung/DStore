@@ -27,6 +27,8 @@ Route::prefix('products')->group(function(){
 Route::get('san-pham',[ProductController::class,'getProducts']);
 Route::get('san-pham/{slug}',[ProductController::class,'getProductsByCategory']);
 Route::get('chi-tiet-san-pham/{slug}',[ProductController::class,'getProductsBySlug']);
+Route::get('san-pham-sale',[ProductController::class,'getProductSale']);
+Route::get('san-pham-noi-bat',[ProductController::class,'getBestSellingProducts']);
 });
 
 Route::get('banners',[BannerController::class,'getBanners']);
