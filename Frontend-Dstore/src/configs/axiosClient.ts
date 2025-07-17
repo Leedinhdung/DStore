@@ -1,3 +1,4 @@
+import { authApi } from "@/api/services/accounts/auth";
 import { backendUrl } from "@/configs/baseUrl";
 import { getAccessTokenFromLocalStorage } from "@/lib/common";
 import axios from "axios";
@@ -5,6 +6,8 @@ import axios from "axios";
 // Tạo instance axios
 const axiosClient = axios.create({
 	baseURL: backendUrl,
+	withCredentials: true,
+	withXSRFToken: true,
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -41,11 +44,8 @@ axiosClient.interceptors.response.use(
 			originalRequest._retry = true;
 
 			try {
-				const refreshToken = localStorage.getItem("refresh_token");
-				const response = await axios.post(`${backendUrl}/refresh-token`, {
-					refresh_token: refreshToken,
-				});
-
+				const response = await authApi.refreshToken();
+				console.log(response);
 				const { access_token, refresh_token } = response.data.data;
 				localStorage.setItem("access_token", access_token);
 				localStorage.setItem("refresh_token", refresh_token);

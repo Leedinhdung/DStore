@@ -5,6 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface CartProduct extends Product {
 	quantity: number;
 	title: string;
+	product_id: number;
 }
 
 interface CartState {

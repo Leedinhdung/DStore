@@ -1,5 +1,6 @@
-export interface IUser{
-    full_name: string;
+export interface IUser {
+	id: number;
+	full_name: string;
 	email: string;
-    avatar: string;
+	avatar: string;
 }
