@@ -22,12 +22,10 @@ return new class extends Migration
             $table->string('image');
             $table->decimal('original_price',15,2);
             $table->decimal('sale_price',15,2)->nullable();
-            $table->string('stock');
             $table->enum('condition', ['instock', 'outofstock'])->default('instock');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('description');
             $table->text('short_description');
-            $table->longText(' specification');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -31,7 +31,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::withSum('variants', 'quantity')->paginate(10);
         return view('product.index', compact('products'));
     }
     public function trash()
@@ -45,6 +45,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+
         $pathImage = null;
         DB::beginTransaction();
         try {
@@ -73,6 +74,7 @@ class ProductController extends Controller
                 $variant = $product->variants()->create([
                     'color' => $variantData['color'] ?? null,
                     'price' => $variantData['price'] ?? null,
+                    'quantity' => $variantData['quantity'] ?? null,
                 ]);
 
                 if (!$variant) {
@@ -144,40 +146,41 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, string $id)
     {
-
         DB::beginTransaction();
         try {
-            $product=Product::with('variants.images')->findOrFail($id);
-            $data=$request->validated();
-            if(!empty($data['title'])){
-                $data['slug']=Str::slug($data['title']);
+            $product = Product::with('variants.images')->findOrFail($id);
+            $data = $request->validated();
+            if (!empty($data['title'])) {
+                $data['slug'] = Str::slug($data['title']);
             }
-          if($request->hasFile('image')){
-            if($product->image && Storage::exists($product->image)){
-                Storage::delete($product->image);
+            if ($request->hasFile('image')) {
+                if ($product->image && Storage::exists($product->image)) {
+                    Storage::delete($product->image);
+                }
+                $data['image'] = $this->handleImageUpload($request, 'products');
             }
-            $data['image']=$this->handleImageUpload($request,'products');
-          }
 
             $product->update($data);
             $product->variants()->delete();
-        if (!empty($request->variants)) {
-            foreach ($request->variants as $variantData) {
-                $variant = $product->variants()->create([
-                    'color' => $variantData['color'] ?? null,
-                    'price' => $variantData['price'] ?? null,
-                ]);
-                if (!empty($variantData['image'])) {
-                    foreach ($variantData['image'] as $imageFile) {
-                        if ($imageFile && $imageFile->isValid()) {
-                            $path = $imageFile->store('variants', 'public');
-                            $variant->images()->create(['image_path' => $path]);
+            if (!empty($request->variants)) {
+                foreach ($request->variants as $variantData) {
+                    $variant = $product->variants()->create([
+                        'color' => $variantData['color'] ?? null,
+                        'price' => $variantData['price'] ?? null,
+                        'quantity' => $variantData['quantity'] ?? null,
+                    ]);
+                    if (!empty($variantData['image'])) {
+                        foreach ($variantData['image'] as $imageFile) {
+                            if ($imageFile && $imageFile->isValid()) {
+                                $path = $imageFile->store('variants', 'public');
+                                $variant->images()->create(['image_path' => $path]);
+                            }
                         }
                     }
                 }
             }
-        }
             DB::commit();
+             return redirect()->route('admin.product.index')->with('success', 'Sửa sản phẩm thành công');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Product update failed: ' . $e->getMessage(), [

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->string('color');
+            $table->string('quantity');
             $table->decimal('price',15,2);
             $table->softDeletes();
             $table->timestamps();

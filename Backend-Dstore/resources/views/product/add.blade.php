@@ -38,7 +38,7 @@
                             @enderror
                         </div>
                         <div class="row">
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">Thương hiệu</label>
                                 <input type="text" class="form-control" name="brand" value="{{old('brand')}}"
                                        placeholder="Nhập thương hiệu">
@@ -46,7 +46,7 @@
                                 <div class="text-danger my-2"> {{$message}} </div>
                                 @enderror
                             </div>
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">SKU</label>
                                 <input type="text" class="form-control" name="sku" value="{{old('sku')}}"
                                        placeholder="Nhập mã sản phẩm">
@@ -54,15 +54,7 @@
                                 <div class="text-danger my-2"> {{$message}} </div>
                                 @enderror
                             </div>
-                            <div class=" col-3 mb-3">
-                                <label class="form-label" for="product-title-input">Số lượng</label>
-                                <input type="text" class="form-control" name="stock" value="{{old('stock')}}"
-                                       placeholder="Nhập số lượng">
-                                @error('stock')
-                                <div class="text-danger my-2"> {{$message}} </div>
-                                @enderror
-                            </div>
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">Tình trạng</label>
                                 <select class="form-select" name="condition">
                                     <option value="instock">Còn hàng</option>
@@ -116,18 +108,25 @@
                         <div class="tab-content">
                             <div id="variant-container">
                                 <div class="row variant-group" data-index="0">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">Màu sắc</label>
                                             <input type="text" class="form-control" name="variants[0][color]"
                                                    placeholder="e.g. Black" >
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">Giá</label>
                                             <input type="number" class="form-control" name="variants[0][price]"
                                                    placeholder="e.g. 350000" >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="mb-3">
+                                            <label class="form-label">Số lượng</label>
+                                            <input type="number" class="form-control" name="variants[0][quantity]"
+                                                   value="10" >
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
@@ -246,16 +245,22 @@
             const container = document.getElementById('variant-container');
             const html = `
         <div class="row variant-group" data-index="${variantIndex}">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="mb-3">
                     <label class="form-label">Màu sắc</label>
                     <input type="text" class="form-control" name="variants[${variantIndex}][color]" >
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="mb-3">
                     <label class="form-label">Giá</label>
                     <input type="number" class="form-control" name="variants[${variantIndex}][price]" >
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="mb-3">
+                    <label class="form-label">Số lượng</label>
+                    <input type="number" class="form-control" value="10" name="variants[${variantIndex}][quantity]" >
                 </div>
             </div>
             <div class="col-lg-3">
