@@ -73,9 +73,9 @@ const Cart = () => {
                             <p>{priceFormat(totalAmount)}</p>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <button className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">
+                            <Link to={routes.checkout} className="w-full font-bold uppercase text-center bg-[#1781E0] rounded-xl text-white p-4">
                                 Tiến hành đặt hàng
-                            </button>
+                            </Link>
                             <Link to={routes.home}>
                                 <button className="w-full font-bold uppercase text-center border border-[#1781E0] rounded-xl text-[#1781E0] p-4">
                                     Chọn thêm sản phẩm khác

@@ -1,3 +1,4 @@
+import { useUserStore } from "@/app/userStore";
 import AddToCartModal from "@/components/modals/AddToCartModal";
 import ProductCard from "@/components/Product/ProductCard";
 import { addToCart } from "@/features/cart/cartSlice";
@@ -26,7 +27,8 @@ const DetailProduct = () => {
     const dispatch = useDispatch()
     const [showFullSpec, setShowFullSpec] = useState(false);
     const [showFullDescription, setShowFullDescription] = useState(false);
-
+    const user = useUserStore(state => state.user)
+    console.log(user)
     return (
         <div className="max-w-screen-xl mx-auto px-4">
             <Stack spacing={2}>
@@ -215,6 +217,8 @@ const DetailProduct = () => {
                                 }
                                 setModalOpen(true)
                                 dispatch(addToCart({
+                                    user_id: user?.id ?? null,
+                                    product_id: selectedVariant.product_id,
                                     id: selectedVariant.id,
                                     title: detailProduct?.title,
                                     price: selectedVariant.price,

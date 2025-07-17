@@ -4,7 +4,9 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\OtpController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -13,6 +15,7 @@ Route::prefix('auth')->group(function () {
     Route::post('refresh-token', [AuthController::class, 'refreshToken']);
     Route::post('send-otp', [OtpController::class, 'send']);
     Route::post('verify-otp', [OtpController::class, 'verify']);
+    Route::post('/checkout', [CheckoutController::class, 'store']);
 });
 Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('auth')->group(function(){
@@ -34,3 +37,9 @@ Route::get('san-pham-noi-bat',[ProductController::class,'getBestSellingProducts'
 Route::get('banners',[BannerController::class,'getBanners']);
 
 Route::get('search',[ProductController::class,'searchProduts']);
+
+Route::get('vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('vnpay/ipn', [CheckoutController::class, 'vnpayIPN'])->name('vnpay.ipn');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');

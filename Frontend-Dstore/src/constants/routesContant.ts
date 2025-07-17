@@ -8,6 +8,8 @@ import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import AuthLayout from "@/layouts/AuthLayout";
 import ProductCategory from "@/pages/ProductCategory/ProductCategory";
+import Checkout from "@/pages/Checkout/Checkout";
+
 
 export const publicRoutes = [
 	{ path: routes.home, layout: Layout, element: Home },
@@ -16,4 +18,5 @@ export const publicRoutes = [
 	{ path: routes.detailProduct, layout: Layout, element: DetailProduct },
 	{ path: routes.cart, layout: Layout, element: Cart },
 	{ path: routes.category, layout: Layout, element: ProductCategory },
+	{ path: routes.checkout, layout: Layout, element: Checkout },
 ];

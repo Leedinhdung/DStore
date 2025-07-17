@@ -5,5 +5,6 @@ const routes = {
 	detailProduct: "/chi-tiet/:slug",
 	cart: "/gio-hang",
 	category: "/danh-muc/:slug",
+	checkout: "/thanh-toan",
 };
 export default routes;

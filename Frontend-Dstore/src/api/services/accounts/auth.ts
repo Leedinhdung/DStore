@@ -1,7 +1,9 @@
 import { authUri } from "@/api/uris/auth";
 import axiosClient from "@/configs/axiosClient";
-import { ILogin, ISignUp, IUserProfile } from "@/types/auth";
+
+import { ILogin, IRefreshToken, ISignUp, IUserProfile } from "@/types/auth";
 import { IResponse } from "@/types/common";
+import { ApiResponse, CreateOrderRequest } from "@/types/order";
 import { VerifyOTPData, VerifyOTPResponse } from "@/types/verifyOtp";
 
 export const authApi = {
@@ -16,5 +18,13 @@ export const authApi = {
 	},
 	verifyOTP: async (data: VerifyOTPData): Promise<VerifyOTPResponse> => {
 		return axiosClient.post(authUri.VERIFY_OTP, data);
+	},
+	refreshToken: async (): Promise<IRefreshToken> => {
+		return axiosClient.post(authUri.REFRESH_TOKEN);
+	},
+	checkout: async (
+		orderData: CreateOrderRequest
+	): Promise<ApiResponse<CreateOrderRequest>> => {
+		return axiosClient.post(authUri.CHECKOUT, orderData);
 	},
 };

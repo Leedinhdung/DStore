@@ -16,8 +16,11 @@ export interface IProfile {
 	address: string;
 	avatar: string;
 }
+export interface IRefreshToken {
+	access_token: string;
+}
 export interface IUserProfile {
-    access_token: string
-    user: IUser
-    profile: IProfile
+	access_token: string;
+	user: IUser;
+	profile: IProfile;
 }
