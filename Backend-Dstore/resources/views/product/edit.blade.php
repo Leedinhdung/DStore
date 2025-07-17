@@ -38,7 +38,7 @@
                             @enderror
                         </div>
                         <div class="row">
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">Thương hiệu</label>
                                 <input type="text" class="form-control" name="brand" value="{{old('brand',$product->brand)}}"
                                        placeholder="Nhập thương hiệu">
@@ -46,7 +46,7 @@
                                 <div class="text-danger my-2"> {{$message}} </div>
                                 @enderror
                             </div>
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">SKU</label>
                                 <input type="text" class="form-control" name="sku" value="{{old('sku',$product->sku)}}"
                                        placeholder="Nhập mã sản phẩm">
@@ -54,15 +54,7 @@
                                 <div class="text-danger my-2"> {{$message}} </div>
                                 @enderror
                             </div>
-                            <div class=" col-3 mb-3">
-                                <label class="form-label" for="product-title-input">Số lượng</label>
-                                <input type="text" class="form-control" name="stock" value="{{old('stock',$product->stock)}}"
-                                       placeholder="Nhập số lượng">
-                                @error('stock')
-                                <div class="text-danger my-2"> {{$message}} </div>
-                                @enderror
-                            </div>
-                            <div class=" col-3 mb-3">
+                            <div class=" col-4 mb-3">
                                 <label class="form-label" for="product-title-input">Tình trạng</label>
                                 <select class="form-select" name="condition">
                                     <option value="instock" {{ old('condition', $product->condition ?? '') == 'instock' ? 'selected' : '' }}>Còn hàng</option>
@@ -117,7 +109,7 @@
                             @foreach($product->variants as $variant )
                             <div id="variant-container">
                                 <div class="row variant-group" data-index="0">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">Màu sắc</label>
                                             <input type="text" class="form-control" name="variants[0][color]"
@@ -128,6 +120,13 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giá</label>
                                             <input type="number" class="form-control" value="{{old('price',$variant->price)}}" name="variants[0][price]"
+                                                   placeholder="e.g. 350000" >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="mb-3">
+                                            <label class="form-label">Số lượng</label>
+                                            <input type="number" class="form-control" value="{{old('quantity',$variant->quantity)}}" name="variants[0][quantity]"
                                                    placeholder="e.g. 350000" >
                                         </div>
                                     </div>

@@ -26,7 +26,6 @@ class StoreProductRequest extends FormRequest
             'title' => 'required|string|max:255',
             'brand' => 'required|string|max:255',
             'sku' => 'required|string|max:100|unique:products,sku',
-            'stock' => 'required|integer|min:0',
             'condition' => 'required|in:instock,outofstock',
             'original_price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lte:original_price',
@@ -37,6 +36,7 @@ class StoreProductRequest extends FormRequest
             'variants' => 'required|array|min:1',
             'variants.*.color' => 'nullable|string|max:100',
             'variants.*.price' => 'required|numeric|min:0',
+            'variants.*.quantity' => 'required|numeric|min:0',
             'variants.*.image' => 'nullable|array',
             'variants.*.image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
         ];
@@ -57,11 +57,6 @@ class StoreProductRequest extends FormRequest
             'sku.string' => 'Mã SKU phải là chuỗi ký tự.',
             'sku.max' => 'Mã SKU không được vượt quá 100 ký tự.',
             'sku.unique' => 'Mã SKU đã tồn tại.',
-
-            'stock.required' => 'Vui lòng nhập số lượng tồn kho.',
-            'stock.integer' => 'Số lượng tồn kho phải là số nguyên.',
-            'stock.min' => 'Số lượng tồn kho không được âm.',
-
             'condition.required' => 'Vui lòng chọn trạng thái.',
             'condition.in' => 'Trạng thái không hợp lệ.',
 
@@ -99,6 +94,10 @@ class StoreProductRequest extends FormRequest
             'variants.*.price.required' => 'Giá biến thể không được để trống.',
             'variants.*.price.numeric' => 'Giá biến thể phải là số.',
             'variants.*.price.min' => 'Giá biến thể không được âm.',
+
+            'variants.*.required' => 'Vui lòng nhập số lượng tồn kho.',
+            'variants.*.integer' => 'Số lượng tồn kho phải là số nguyên.',
+            'variants.*.min' => 'Số lượng tồn kho không được âm.',
 
             'variants.*.image.array' => 'Ảnh biến thể phải là mảng.',
             'variants.*.image.*.image' => 'Tệp tải lên phải là ảnh.',

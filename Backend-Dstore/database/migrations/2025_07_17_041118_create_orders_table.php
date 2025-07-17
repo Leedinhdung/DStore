@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->string('vnp_transaction_id')->nullable();
             $table->string('vnp_response_code')->nullable();
+            $table->string('vnp_bank_code')->nullable();
             $table->timestamp('vnp_paid_at')->nullable();
             $table->timestamps();
         });

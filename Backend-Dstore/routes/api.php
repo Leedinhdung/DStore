@@ -15,7 +15,7 @@ Route::prefix('auth')->group(function () {
     Route::post('refresh-token', [AuthController::class, 'refreshToken']);
     Route::post('send-otp', [OtpController::class, 'send']);
     Route::post('verify-otp', [OtpController::class, 'verify']);
-    Route::post('/checkout', [CheckoutController::class, 'store']);
+    Route::post('checkout', [CheckoutController::class, 'store']);
 });
 Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('auth')->group(function(){
@@ -40,6 +40,3 @@ Route::get('search',[ProductController::class,'searchProduts']);
 
 Route::get('vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 Route::post('vnpay/ipn', [CheckoutController::class, 'vnpayIPN'])->name('vnpay.ipn');
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
