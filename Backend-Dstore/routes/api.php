@@ -32,6 +32,7 @@ Route::get('san-pham/{slug}',[ProductController::class,'getProductsByCategory'])
 Route::get('chi-tiet-san-pham/{slug}',[ProductController::class,'getProductsBySlug']);
 Route::get('san-pham-sale',[ProductController::class,'getProductSale']);
 Route::get('san-pham-noi-bat',[ProductController::class,'getBestSellingProducts']);
+Route::get('so-luong/{id}',[ProductController::class,'getStockProduct']);
 });
 
 Route::get('banners',[BannerController::class,'getBanners']);

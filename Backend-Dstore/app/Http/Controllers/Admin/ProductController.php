@@ -147,54 +147,115 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, string $id)
     {
         DB::beginTransaction();
+
         try {
             $product = Product::with('variants.images')->findOrFail($id);
             $data = $request->validated();
+
+            // Tạo slug mới nếu có title
             if (!empty($data['title'])) {
                 $data['slug'] = Str::slug($data['title']);
             }
+
+            // Xử lý ảnh chính sản phẩm
             if ($request->hasFile('image')) {
-                if ($product->image && Storage::exists($product->image)) {
-                    Storage::delete($product->image);
+                $newImagePath = $this->handleImageUpload($request, 'products');
+                if ($newImagePath) {
+                    if ($product->image && Storage::disk('public')->exists($product->image)) {
+                        Storage::disk('public')->delete($product->image);
+                    }
+                    $data['image'] = $newImagePath;
                 }
-                $data['image'] = $this->handleImageUpload($request, 'products');
             }
 
             $product->update($data);
-            $product->variants()->delete();
+
+            $existingVariantIds = $product->variants()->pluck('id')->toArray();
+            $incomingVariantIds = [];
+
             if (!empty($request->variants)) {
                 foreach ($request->variants as $variantData) {
-                    $variant = $product->variants()->create([
-                        'color' => $variantData['color'] ?? null,
-                        'price' => $variantData['price'] ?? null,
-                        'quantity' => $variantData['quantity'] ?? null,
-                    ]);
-                    if (!empty($variantData['image'])) {
-                        foreach ($variantData['image'] as $imageFile) {
-                            if ($imageFile && $imageFile->isValid()) {
-                                $path = $imageFile->store('variants', 'public');
-                                $variant->images()->create(['image_path' => $path]);
+                    $variantId = $variantData['id'] ?? null;
+
+                    if ($variantId && $variant = $product->variants()->with('images')->find($variantId)) {
+                        // Cập nhật biến thể
+                        $variant->update([
+                            'color' => $variantData['color'] ?? null,
+                            'price' => $variantData['price'] ?? null,
+                            'quantity' => $variantData['quantity'] ?? null,
+                        ]);
+                        $incomingVariantIds[] = $variant->id;
+
+                        // Nếu có ảnh mới, xóa ảnh cũ rồi thêm ảnh mới
+                        if (!empty($variantData['image'])) {
+                            foreach ($variant->images as $image) {
+                                if (Storage::disk('public')->exists($image->image_path)) {
+                                    Storage::disk('public')->delete($image->image_path);
+                                }
+                            }
+                            $variant->images()->delete();
+
+                            foreach ($variantData['image'] as $file) {
+                                if ($file && $file->isValid()) {
+                                    $path = $file->store('variants', 'public');
+                                    $variant->images()->create(['image_path' => $path]);
+                                }
+                            }
+                        }
+                    } else {
+                        // Tạo mới biến thể
+                        $variant = $product->variants()->create([
+                            'color' => $variantData['color'] ?? null,
+                            'price' => $variantData['price'] ?? null,
+                            'quantity' => $variantData['quantity'] ?? null,
+                        ]);
+                        $incomingVariantIds[] = $variant->id;
+
+                        // Lưu ảnh mới nếu có
+                        if (!empty($variantData['image'])) {
+                            foreach ($variantData['image'] as $file) {
+                                if ($file && $file->isValid()) {
+                                    $path = $file->store('variants', 'public');
+                                    $variant->images()->create(['image_path' => $path]);
+                                }
                             }
                         }
                     }
                 }
             }
+
+            // Xoá các biến thể không còn trong form
+            $variantsToDelete = array_diff($existingVariantIds, $incomingVariantIds);
+            foreach ($variantsToDelete as $variantId) {
+                $variant = $product->variants()->with('images')->find($variantId);
+                if ($variant) {
+                    foreach ($variant->images as $image) {
+                        if (Storage::disk('public')->exists($image->image_path)) {
+                            Storage::disk('public')->delete($image->image_path);
+                        }
+                    }
+                    $variant->images()->delete();
+                    $variant->delete();
+                }
+            }
+
             DB::commit();
-             return redirect()->route('admin.product.index')->with('success', 'Sửa sản phẩm thành công');
+
+            return redirect()->route('admin.product.index')->with('success', 'Cập nhật sản phẩm thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
+
             Log::error('Product update failed: ' . $e->getMessage(), [
                 'request_data' => $request->except(['image', 'variants']),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
             ]);
-
-            if (!empty($pathImage) && Storage::exists($pathImage)) {
-                Storage::delete($pathImage);
-            }
 
             return redirect()->route('admin.product.index')->with('error', 'Sửa thất bại: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -238,7 +299,7 @@ class ProductController extends Controller
             return redirect()->back()->with('success', 'Đã xóa vĩnh viễn sản phẩm và toàn bộ ảnh liên quan!');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Product force delete failed: ' . $e->getMessage());
+            Log::error('Product force delete failed: ' . $e->getMessage());
             return redirect()->route('admin.product.index')->with('error', 'Xóa vĩnh viễn thất bại: ' . $e->getMessage());
         }
     }

@@ -40,13 +40,18 @@ class UpdateProductRequest extends FormRequest
             'description' => 'required|string',
             'specification' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
             'variants' => 'required|array|min:1',
+            'variants.*.id' => 'nullable|integer|exists:product_variants,id',
             'variants.*.color' => 'nullable|string|max:100',
             'variants.*.price' => 'required|numeric|min:0',
+            'variants.*.quantity' => 'required|integer|min:0',
             'variants.*.image' => 'nullable|array',
             'variants.*.image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'category_id' => ['required', 'exists:categories,id'],
         ];
     }
+
 
     public function messages(): array
     {
@@ -71,7 +76,6 @@ class UpdateProductRequest extends FormRequest
             'original_price.numeric' => 'Giá gốc phải là số.',
             'original_price.min' => 'Giá gốc không được âm.',
 
-            'sale_price.required' => 'Vui lòng nhập giá bán.',
             'sale_price.numeric' => 'Giá bán phải là số.',
             'sale_price.min' => 'Giá bán không được âm.',
             'sale_price.lte' => 'Giá bán không được cao hơn giá gốc.',
