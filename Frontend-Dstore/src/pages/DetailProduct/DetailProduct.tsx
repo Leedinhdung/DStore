@@ -222,6 +222,7 @@ const DetailProduct = () => {
                                     id: selectedVariant.id,
                                     title: detailProduct?.title,
                                     price: selectedVariant.price,
+                                    quantity: selectedVariant.quantity,
                                     image: selectedVariant.images?.[0]?.image_path || detailProduct?.image,
                                     brand: detailProduct?.brand,
                                     sku: detailProduct?.sku,

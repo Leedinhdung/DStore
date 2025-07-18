@@ -1,5 +1,6 @@
 import { CartProduct, removeFromCart, updateQuantityProduct } from "@/features/cart/cartSlice";
 import { priceFormat } from "@/helpers/formatHelper";
+import { useGetStockProduct } from "@/hooks/product/useGetProducts";
 import { getImageUrl } from "@/lib/common";
 import { validateQuantity } from "@/utils/validation";
 import { Button } from "@mui/material";
@@ -12,9 +13,13 @@ interface CartItemProps {
 
 const CartItem = ({ item }: CartItemProps) => {
     const dispatch = useDispatch();
-
+    const { data: stockData } = useGetStockProduct(item.id)
+    const stock = stockData?.stock ?? 0
     const increaseQuantity = () => {
         const newQuantity = item.quantity + 1;
+        if (newQuantity > stock) {
+            return;
+        }
         if (validateQuantity(newQuantity)) {
             dispatch(updateQuantityProduct({ id: item.id, quantity: newQuantity }));
         }

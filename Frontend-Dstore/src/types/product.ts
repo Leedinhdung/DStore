@@ -10,7 +10,6 @@ export interface IProduct {
 	image: string;
 	original_price: number;
 	sale_price?: number | null;
-	stock: string;
 	condition: string;
 	status: string;
 	description: string;
@@ -26,7 +25,9 @@ export interface IVariant {
 	product_id: number;
 	color: string;
 	price: number;
+	quantity: number;
 	images: IVariantImage[];
+	stock: number;
 }
 
 export interface IVariantImage {

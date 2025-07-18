@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\VariantImage;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class CheckoutController extends Controller
             'note' => 'nullable|string|max:255',
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|exists:products,id',
+            'items.*.variant_id' => 'required|exists:product_variants,id',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
         ]);
@@ -41,26 +43,34 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 'pending',
                 'note' => $request->note,
-                'user_id' => null, // Guest checkout
+                'user_id' => null,
             ]);
 
             foreach ($request->items as $item) {
+                // 1. Tạo order item
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item['id'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ]);
-            }
-            $product = Product::find($item['id']);
-            if ($product) {
-                $product->stock -= $item['quantity'];
-                if ($product->stock <= 0) {
-                    $product->stock = 0;
-                    $product->condition = 'outofstock';
+
+                $variant = ProductVariant::find($item['variant_id']);
+                if ($variant) {
+                    $variant->quantity -= $item['quantity'];
+                    $variant->quantity = max(0, $variant->quantity);
+                    $variant->save();
+
+                    if ($variant->quantity === 0) {
+                        $product = $variant->product;
+                        if ($product && !$product->variants()->where('quantity', '>', 0)->exists()) {
+                            $product->condition = 'outofstock';
+                            $product->save();
+                        }
+                    }
                 }
-                $product->save();
             }
+
             if ($request->payment_method === 'vnpay') {
                 DB::commit();
                 return response()->json([

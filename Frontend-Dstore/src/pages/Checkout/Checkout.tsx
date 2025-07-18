@@ -15,10 +15,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { CreateOrderRequest } from "@/types/order"
+import { useUserStore } from "@/app/userStore"
 
 
 export default function CheckoutForm() {
   const cart = useSelector((state: RootState) => state.cart)
+  const user = useUserStore(state => state.user);
+  console.log(user)
   const { mutateAsync: checkout, isLoading } = useCheckout()
   const shippingFee = 50000
   const totalAmount = cart.products.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -43,6 +46,7 @@ export default function CheckoutForm() {
       note: data.note,
       items: cart.products.map(item => ({
         id: item.product_id,
+        variant_id: item.id,
         quantity: item.quantity,
         price: Number(item.price)
       })),
@@ -133,6 +137,7 @@ export default function CheckoutForm() {
               <Input
                 id="name"
                 placeholder="Nguyễn Văn A"
+                defaultValue={user?.full_name ?? ""}
                 {...register("customer_name", { required: "Bắt buộc" })}
               />
               {errors.customer_name && <p className="text-sm text-red-500">{errors.customer_name.message}</p>}
@@ -154,6 +159,7 @@ export default function CheckoutForm() {
               id="email"
               type="email"
               placeholder="example@email.com"
+              defaultValue={user?.email ?? ''}
               {...register("customer_email", { required: "Bắt buộc" })}
             />
             {errors.customer_email && <p className="text-sm text-red-500">{errors.customer_email.message}</p>}

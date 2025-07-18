@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -136,6 +137,18 @@ class ProductController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+    public function getStockProduct(string $id)
+    {
+        $variant = ProductVariant::find($id);
+        if (!$variant) {
+            return response()->json(['error' => 'Biến thể không tồn tại'], 404);
+        }
+
+        return response()->json([
+            'variant_id' => $variant->id,
+            'stock' => $variant->quantity
+        ]);
     }
     // public function getBestSellingProducts()
     // {
