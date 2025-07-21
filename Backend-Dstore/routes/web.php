@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Middleware\AdminAuthenticate;
@@ -59,6 +60,13 @@ Route::prefix('quan-tri')->as('admin.')->group(function () {
             Route::get('/danh-sach/xoa/{id}', [ProductController::class, 'softDelete'])->name('softDelete');
             Route::get('/danh-sach/xoa-vinh-vien/{id}', [ProductController::class, 'destroy'])->name('destroy');
             Route::get('/danh-sach/khoi-phuc/{id}', [ProductController::class, 'restore'])->name('restore');
+        });
+
+        //Order
+        Route::prefix('don-hang')->as('order.')->group(function () {
+            Route::get('/danh-sach', [OrderController::class, 'index'])->name('index');
+            Route::get('/chi-tiet/{order}', [OrderController::class, 'show'])->name('show');
+            Route::post('/cap-nhat/{order}', [OrderController::class, 'updateStatus'])->name('updateStatus');
         });
     });
 });
