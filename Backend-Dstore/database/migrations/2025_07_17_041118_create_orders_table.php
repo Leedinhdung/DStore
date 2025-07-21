@@ -21,7 +21,8 @@ return new class extends Migration
             $table->text('shipping_address');
             $table->decimal('total_amount', 15, 2);
             $table->enum('payment_method', ['cod', 'vnpay'])->default('vnpay');
-            $table->enum('status', ['pending', 'paid', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'shipped', 'cancelled'])->default('pending');
+            $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
             $table->text('note')->nullable();
             $table->string('vnp_transaction_id')->nullable();
             $table->string('vnp_response_code')->nullable();

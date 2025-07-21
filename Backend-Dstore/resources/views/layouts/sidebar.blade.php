@@ -39,8 +39,7 @@
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarBanner" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarBanner">
+                    <a class="nav-link menu-link" href="{{route('admin.banner.index')}}">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý banner</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarBanner">
@@ -60,29 +59,18 @@
                     </div>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarCategory">
+                    <a class="nav-link menu-link" href="{{route('admin.category.index')}}" >
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý danh mục</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarCategory">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{route('admin.category.index')}}" class="nav-link"> Danh sách
-                                </a>
-                            </li>
-                            {{-- <li class="nav-item">
-                                <a href="dashboard-crm.html" class="nav-link" > CRM </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index.html" class="nav-link" > Ecommerce </a>
-                            </li> --}}
-
-                        </ul>
-                    </div>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('admin.product.index')}}">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý sản phẩm</span>
+                    </a>
+                </li> <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('admin.order.index')}}">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Quản lý đơn hàng</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
             </ul>
